@@ -109,7 +109,6 @@ export default class Player extends React.Component {
     });
 
     socketIoAuth.getSocket().on('user.track.update', track => {
-      console.log('syncing');
       if(currentId !== track.track.id){
         // New track
         currentId = track.track.id;
@@ -131,7 +130,7 @@ export default class Player extends React.Component {
     playerMmitter.addListener('localplaylist.add', track => this.addTrackIntoLocalPlaylist(track));
 
     audio.ontimeupdate = () => {
-      
+
       if(this.state.sync){
         socketIoAuth.getSocket().emit('user.sync.track', {
           volume: audio.volume,
