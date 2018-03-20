@@ -5,7 +5,7 @@ export default (subdomain = 'api', path = '/', needAuth = true) => {
         subdomain += '.';
     }
 
-    if (subdomain === '$NA.') {
+    if (subdomain === '$NA.' || subdomain === null) {
         subdomain = "";
     }
 
