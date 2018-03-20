@@ -1,0 +1,39 @@
+#hs_track_player{
+  width: 100vw;
+  position: fixed;
+  bottom: 0em;
+  height: 5em;
+
+  .coverart{
+    width: 5em;
+    height: 5em;
+    background-size: cover;
+  }
+
+  #hs_player_context{
+    position: absolute;
+    top: 0em;
+    left: 6em;
+    width: 90%;
+  }
+
+  #playPauseButton{
+    position: fixed;
+    bottom: 0.5%;
+    right: 50%;
+    transform: translateX(-50%);
+  }
+
+  @media (max-width: 415px) {
+    #hs_player_context{
+      width: 50%;
+    }
+
+    #playPauseButton{
+      position: fixed;
+      bottom: 2.2em;
+      right: 0.5em;
+    }
+  }
+
+}

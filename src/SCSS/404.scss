@@ -1,0 +1,15 @@
+#derpyYay{
+  position: fixed;
+  width: 20em;
+  top: 40%;
+  right: -80vw;
+
+  &.derpy{
+    transition: 10s ease-in-out;
+    right: 130vw;
+  }
+}
+
+#derpy_404{
+  width: 40vw;
+}

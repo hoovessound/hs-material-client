@@ -1,0 +1,40 @@
+#tracks{
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.track_cover_art{
+  width: 100%;
+  height: 100%;
+}
+
+.track_container{
+  width: 15em;
+  height: 15em;
+}
+
+.track_container.backgrounddrop{
+  width: 90%;
+
+  .track_cover_art{
+    width: 17.2em;
+    height: 17.2em;
+  }
+}
+
+@media (max-width: 415px) {
+  .track_container{
+    width: 10em;
+    height: 10em;
+
+    // Backgrounddrop only
+
+    &.backgrounddrop{
+      .track_cover_art{
+        width: 11.5em;
+        height: 11.5em;
+      }
+    }
+
+  }
+}

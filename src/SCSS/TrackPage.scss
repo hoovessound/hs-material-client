@@ -1,0 +1,12 @@
+#coverArt{
+  position: relative;
+  width: 15em;
+  height: 15em;
+}
+
+@media (max-width: 415px) {
+  #coverArt{
+    width: 10em;
+    height: 10em;
+  }
+}
