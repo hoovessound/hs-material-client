@@ -29,6 +29,7 @@ import MenuIcon from "material-ui-icons/Menu";
 import FavoriteIcon from "material-ui-icons/Favorite";
 import Brightness2 from "material-ui-icons/Brightness2";
 import AttachMoney from "material-ui-icons/AttachMoney";
+import CloudUpload from "material-ui-icons/CloudUpload";
 import getApiUrl from "../Utils/getApiUrl";
 
 const emitter = new EventEmitter();
@@ -81,10 +82,6 @@ class MenuAppBar extends React.Component {
       this.fetchUserInfo();    
     }
   }
-
-  handleChange = (event, checked) => {
-    this.setState({ auth: checked });
-  };
 
   handleMenu = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -146,41 +143,55 @@ class MenuAppBar extends React.Component {
                 HoovesSound(BETA)
               </Link>
             </Typography>
+
             {
               (() => {
                 if(cookie.load('jwt_token')){
                   return (
                     <div>
+
+                        <IconButton>
+                            <Tooltip title={'Upload Track'}>
+                                <Link to={"/upload"}>
+                                    <CloudUpload />
+                                </Link>
+                            </Tooltip>
+                        </IconButton>
+
                       {
                         (() => {
                           if(this.state.user.username){
                             return (
                               <Tooltip title="Your Profile">
-                                <Avatar
-                                  alt={this.state.user.username + ' avatar'}
-                                  src={
-                                    (() => {
-                                      const url = `https://api.hoovessound.ml/image/avatar/${this.state.user.username}?widht=50`;
-                                      return googleCacheImage(url, 50);
-                                    })()
-                                  }
-                                  onClick={this.handleMenu}
-                                  aria-owns={open ? "menu-appbar" : null}
-                                  aria-haspopup="true"
-                                  style={{
-                                    cursor: "pointer"
-                                  }}
-                                />
+                                <IconButton>
+                                  <Avatar
+                                    alt={this.state.user.username + ' avatar'}
+                                    src={
+                                      (() => {
+                                        const url = `https://api.hoovessound.ml/image/avatar/${this.state.user.username}?widht=50`;
+                                        return googleCacheImage(url, 50);
+                                      })()
+                                    }
+                                    onClick={this.handleMenu}
+                                    aria-owns={open ? "menu-appbar" : null}
+                                    aria-haspopup="true"
+                                    style={{
+                                      cursor: "pointer"
+                                    }}
+                                  />
+                                </IconButton>
                               </Tooltip>
                             )
                           }else{
-                            <Tooltip title="Your Profile">
-                              <CircularProgress color="secondary"/>
-                            </Tooltip>
+                            return (
+                                <Tooltip title="Your Profile">
+                                    <CircularProgress color="secondary"/>
+                                </Tooltip>
+                            )
                           }
                         })()
                       }
-                      
+
                       <Menu
                         id="menu-appbar"
                         anchorEl={anchorEl}
