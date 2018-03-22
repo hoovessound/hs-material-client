@@ -25,6 +25,11 @@ if(typeof localStorage.getItem('hs_sync') === 'object'){
   localStorage.setItem('hs_sync', 'true');
 }
 
+// Fade out = true
+if(typeof localStorage.getItem('hs_fadeout') === 'object'){
+  localStorage.setItem('hs_fadeout', 'true');
+}
+
 if(localStorage.getItem('hs_access_token')){
   localStorage.removeItem('hs_access_token');
   window.location = '/login';

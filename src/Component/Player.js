@@ -46,12 +46,28 @@ export default class Player extends React.Component {
     timeLineValue: 0,
     darkTheme: isDarkTheme(),
     sync: localStorage.getItem('hs_sync') === 'true' ? true : false,
+    fadeOut: localStorage.getItem('hs_fadeout') === 'true' ? true : false,
     localPlaylist: {},
   }
 
   constructor() {
     super();
     this.emitter = playerMmitter;
+  }
+
+  fadeOut(){
+    const initVolume = audio.volume;
+    let actualVolume = audio.volume;
+    let fadeOutInterval = setInterval(function(){
+        actualVolume = (parseFloat(actualVolume) - 0.1).toFixed(1);
+        if(actualVolume >= 0){
+          audio.volume = actualVolume;
+        } else {
+          audio.pause();
+          audio.volume = initVolume;
+          clearInterval(fadeOutInterval);
+        }
+    }, 30);
   }
 
   addTrackIntoLocalPlaylist(tracks){
@@ -183,6 +199,12 @@ export default class Player extends React.Component {
       });
     });
 
+    settingPage.emitter.addListener('setting.fadeOut', fadeOut => {
+      this.setState({
+        fadeOut,
+      });
+    });
+
     emitter.addListener('loadUserHistory', history => this.loadUserHistory(history));
   }
 
@@ -253,7 +275,11 @@ export default class Player extends React.Component {
         audio.play();
       });
       navigator.mediaSession.setActionHandler('pause', () => {
-        audio.pause();
+        if(this.state.fadeOut){
+          this.fadeOut();
+        }else{
+          audio.pause();
+        }
       });
     }
 
@@ -261,7 +287,11 @@ export default class Player extends React.Component {
       if (audio.paused) {
         await audio.play();
       } else {
-        await audio.pause();
+        if(this.state.fadeOut){
+          this.fadeOut();
+        }else{
+          await audio.pause();
+        }
       }
     }
     catch(error){

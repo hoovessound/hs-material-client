@@ -19,6 +19,7 @@ export default class Settings extends React.Component {
   state = {
     darkTheme: isDarkTheme(),
     sync: localStorage.getItem('hs_sync') === 'true' ? true : false,
+    fadeOut: localStorage.getItem('hs_fadeout') === 'true' ? true : false,
   }
 
   async componentDidMount(){
@@ -38,6 +39,16 @@ export default class Settings extends React.Component {
     localStorage.setItem('hs_sync', !sync);
     this.notify();
     SettingsEmmiter.emit('setting.sync', !sync);
+  }
+
+  handelfadeOut(){
+    let fadeOut = this.state.fadeOut;
+    this.setState({
+      fadeOut: !fadeOut,
+    });
+    localStorage.setItem('hs_sync', !fadeOut);
+    this.notify();
+    SettingsEmmiter.emit('setting.fadeOut', !fadeOut);
   }
 
   notify(){
@@ -76,7 +87,23 @@ export default class Settings extends React.Component {
             onChange={() => this.handelSync()}
           />
           <br />
-          Syncing your playing track time
+          Syncing your data across devices
+        </Typography>
+
+        <Typography
+          style={{
+            color: this.state.darkTheme ? '#FFF' : '#161616',
+          }}
+        >
+          Fade Out
+          <Switch
+            value="checkedB"
+            color="primary"
+            checked={this.state.fadeOut}
+            onChange={() => this.handelfadeOut()}
+          />
+          <br />
+          When you pause the track, it will fade out instead of killing immediately
         </Typography>
 
         <Button variant="raised" color="secondary">
