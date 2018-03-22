@@ -14,7 +14,6 @@ import InfiniteScroll from 'react-infinite-scroller';
 import '../SCSS/HomePage.scss';
 
 let fetchingTrack = false;
-let allowToFetchTrack = true;
 const player = new Player();
 
 export default class HomePage extends React.Component {
@@ -64,7 +63,7 @@ export default class HomePage extends React.Component {
   }
 
   async fetchTracks(){
-    if(!fetchingTrack && allowToFetchTrack){
+    if(!fetchingTrack){
       fetchingTrack = true;
       this.setState({
         fetchingTrack,
@@ -91,7 +90,6 @@ export default class HomePage extends React.Component {
           });
           player.emitter.emit('localplaylist.add', response.data);
         }else{
-          allowToFetchTrack = false;
           this.setState({
             hasMore: false,
           });
