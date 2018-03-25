@@ -1,6 +1,9 @@
+$totalWidht: 60em;
+
 #tracks{
-  width: 100% !important;
-  height: 100% !important;
+  width: $totalWidht;
+  height: 100%;
+  margin: 0 auto;
 }
 
 .track_cover_art{
@@ -14,7 +17,7 @@
 }
 
 .track_container.backgrounddrop{
-  width: 90%;
+  width: $totalWidht;
 
   .track_cover_art{
     width: 17.2em;
@@ -23,13 +26,19 @@
 }
 
 @media (max-width: 415px) {
+
+  $totalWidht_mobile: 20em;
+
+  #tracks{
+    width: $totalWidht_mobile;
+  }
+
   .track_container{
     width: 10em;
     height: 10em;
 
-    // Backgrounddrop only
-
     &.backgrounddrop{
+      width: $totalWidht_mobile;
       .track_cover_art{
         width: 11.5em;
         height: 11.5em;
