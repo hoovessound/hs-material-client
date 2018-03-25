@@ -8,14 +8,13 @@ import Typography from 'material-ui/Typography';
 import isDarkTheme from '../Utils/isDarkTheme';
 import {emitter} from '../Component/NavBar';
 import AbsoluteCenter from '../Component/AbsoluteCenter';
-import Player from '../Component/Player';
+
 import InfiniteScroll from 'react-infinite-scroller';
 import Grow from 'material-ui/transitions/Grow';
 
 import '../SCSS/HomePage.scss';
 
 let fetchingTrack = false;
-const player = new Player();
 
 export default class HomePage extends React.Component {
 
