@@ -28,28 +28,22 @@ export default class HomePage extends React.Component {
     }
 
     async componentDidMount() {
+        let offset = 0;
         emitter.addListener('change', darkTheme => {
             this.setState({
                 darkTheme,
             });
         });
-
-        function init(offset, self) {
-            self.setState({
-                offset,
-            }, () => {
-                self.fetchTracks();
-            });
+        if(this.props.match.params.offset){
+            offset = parseInt(this.props.match.params.offset, 10);
         }
-
-        if (this.props.match.params.offset) {
-            const offset = parseInt(this.props.match.params.offset, 10);
+        const url = getApiUrl('api', `/tracks?offset=${offset}`);
+        const response = await axios.get(url);
+        if(!response.data.error){
             this.setState({
-                offset,
+                tracks: response.data,
+                offset: (offset + 10),
             });
-            init(offset, this);
-        } else {
-            init(0, this);
         }
     }
 
@@ -63,7 +57,7 @@ export default class HomePage extends React.Component {
         return array;
     }
 
-    async fetchTracks() {
+    async fetchTracks(isInit) {
         if (!fetchingTrack) {
             fetchingTrack = true;
             const url = getApiUrl('api', `/tracks?offset=${this.state.offset}`);
@@ -71,68 +65,24 @@ export default class HomePage extends React.Component {
             const tracks = this.state.tracks;
             if (!response.data.error) {
 
-                const length = response.data.length;
+                response.data.map(track => {
+                    return tracks.push(track);
+                });
+                this.setState({
+                    tracks,
+                });
 
-                if(length >= 1){
-
-                    if(length === 10){
-                        const offset = (this.state.offset + length);
-                        this.setState({
-                            offset,
-                        }, () => {
-                            this.props.history.push(`/${offset}`);
-                        });
-                    }else{
-                        this.setState({
-                            hasMore: false,
-                        });
-                    }
-
-                    response.data.map(track => {
-                        return tracks.push(track);
-                    });
-
+                if(response.data.length >= 1){
+                    this.props.history.push(`/${this.state.offset}`)
                     this.setState({
-                        tracks,
+                        offset: (this.state.offset + response.data.length),
                     });
-
-                    player.emitter.emit('localplaylist.add', response.data);
-
-                    fetchingTrack = false;
-
                 }else{
                     this.setState({
                         hasMore: false,
                     });
                 }
-
-                // if (response.data.length >= 10) {
-                //
-                //     if(response.data.length >= 10){
-                //         this.setState({
-                //             offset: (this.state.offset + response.data.length),
-                //         });
-                //
-                //         // Update the URL bar
-                //         if (this.state.offset !== 0) {
-                //             this.props.history.push(`/${this.state.offset}`);
-                //         }
-                //     }
-                //
-                //     response.data.map(track => {
-                //         return tracks.push(track);
-                //     });
-                //     fetchingTrack = false;
-                //     this.setState({
-                //         tracks,
-                //         fetchingTrack,
-                //     });
-                //     player.emitter.emit('localplaylist.add', response.data);
-                // } else {
-                //     this.setState({
-                //         hasMore: false,
-                //     });
-                // }
+                fetchingTrack = false;
             }
         }
     }
