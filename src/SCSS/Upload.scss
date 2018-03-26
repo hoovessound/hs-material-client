@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css?family=Shadows+Into+Light');
+
+#arrows{
+
+    p{
+        font-family: 'Shadows Into Light', cursive;
+        font-size: 1.5em;
+    }
+
+    img{
+        width: 10em;
+        margin: 2em 0em;
+    }
+
+    #arrow1{
+        transform: rotate(41deg);
+    }
+
+    #arrow2{
+        transform: rotate(90deg);
+    }
+
+    #arrow3{
+        transform: rotate(-222deg);
+    }
+
+    @media (max-width: 415px) {
+        #arrow1{
+            display: none;
+        }
+
+        #arrow3{
+            display: none;
+        }
+
+        img{
+            width: 3em;
+            margin: 0.5em;
+        }
+
+        p{
+            font-size: 1.1em;
+        }
+    }
+
+}

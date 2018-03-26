@@ -12,11 +12,14 @@ import getApiUrl from '../Utils/getApiUrl';
 import { Redirect } from 'react-router-dom';
 
 import ArrowBack from 'material-ui-icons/ArrowBack';
-import CloudUpload from 'material-ui-icons/CloudUpload';
+import MusicNote from 'material-ui-icons/MusicNote';
 import InsertPhoto from 'material-ui-icons/InsertPhoto';
 import CheckCircle from 'material-ui-icons/CheckCircle';
 
 import Fade from 'material-ui/transitions/Fade';
+
+import '../SCSS/Upload.scss';
+
 
 export default class Upload extends React.Component {
 
@@ -30,6 +33,8 @@ export default class Upload extends React.Component {
         uploadFade: true,
         gotPhoto: false,
         progressBarValue: 0,
+        youtubeButtonDisable: false,
+        youtubeButtonText: 'Upload',
     }
 
     handelMenuClick(option){
@@ -113,6 +118,10 @@ export default class Upload extends React.Component {
     }
 
     async youtubeImport(){
+        this.setState({
+            youtubeButtonDisable: true,
+            youtubeButtonText: 'Importing',
+        });
         const form = new FormData();
         form.append('youtube-id', this.state.youtubeUrl);
         form.append('youtube-import', 'on');
@@ -178,8 +187,37 @@ export default class Upload extends React.Component {
                 {
                     (() => {
                         if(this.state.source === 'local'){
+
                             return (
                                 <AbsoluteCenter>
+
+                                    {
+                                        (() => {
+                                            if(this.state.uploadFade){
+                                                return (
+                                                    <div id={'arrows'}>
+                                                        <Typography>Upload An Track</Typography>
+                                                        <img 
+                                                            id={'arrow1'} 
+                                                            alt="arrow"
+                                                            src="http://www.stickpng.com/assets/images/580b57fcd9996e24bc43c450.png" 
+                                                        />
+                                                        <img 
+                                                            id={'arrow2'} 
+                                                            alt="arrow"
+                                                            src="http://www.stickpng.com/assets/images/580b57fcd9996e24bc43c450.png" 
+                                                        />
+                                                        <img 
+                                                            id={'arrow3'} 
+                                                            alt="arrow"
+                                                            src="http://www.stickpng.com/assets/images/580b57fcd9996e24bc43c450.png" 
+                                                        />
+                                                    </div>
+                                                )
+                                            }
+                                        })()
+                                    }
+
                                     <form autocomplete={'off'} ref={'uploadForm'}>
                                         <Fade in={this.state.uploadFade}>
                                             <Button
@@ -206,7 +244,7 @@ export default class Upload extends React.Component {
                                                        name={'audio'}
                                                        accept={'audio/mp3,audio/mpeg,audio/ogg'}
                                                 />
-                                                <CloudUpload />
+                                                <MusicNote />
                                             </Button>
                                         </Fade>
 
@@ -300,14 +338,14 @@ export default class Upload extends React.Component {
                                                (() => {
                                                    if(this.state.isYouTubeUrl){
                                                        return (
-                                                           <Button variant="raised" color="primary" onClick={e => this.youtubeImport(e)}>Upload</Button>
+                                                           <Button variant="raised" color="primary" onClick={e => this.youtubeImport(e)} disable={this.state.youtubeButtonDisable}>{this.state.youtubeButtonText}</Button>
                                                        )
                                                    }else{
                                                        return(
                                                            <div>
                                                                <Typography>Not a valid YouTube URL</Typography>
                                                                <br />
-                                                               <Button variant="raised" color="primary" disabled={true}>Upload</Button>
+                                                               <Button variant="raised" color="primary" disabled={true}>{this.state.youtubeButtonText}</Button>
                                                            </div>
                                                        )
                                                    }

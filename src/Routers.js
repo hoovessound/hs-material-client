@@ -64,8 +64,8 @@ export default class Routers extends React.Component {
                             <Route exact path="/my/playlist" component={MyPlaylist}/>
                             <Route exact path="/prime/about" component={AboutPrimePage}/>
                             <Route exact path="/upload" component={UploadPage}/>
-
                             <Route path="/auth/callback" component={Login}/>
+                            
                             <Route exact path="/@:username" component={ProfilePage}/>
                             <Route exact path="/track/:id" component={TrackPage}/>
                             <Route exact path="/:offset?" component={HomePage}/>
