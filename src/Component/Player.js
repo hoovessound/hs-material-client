@@ -16,6 +16,9 @@ import axios from 'axios';
 import SettingPage from '../Pages/Setting';
 import getApiUrl from '../Utils/getApiUrl';
 import * as socketIoAuth from '../Utils/socketIoAuth';
+import { CircularProgress } from 'material-ui/Progress';
+
+import Fade from 'material-ui/transitions/Fade';
 
 const settingPage = new SettingPage();
 const playerMmitter = new EventEmitter;
@@ -48,6 +51,7 @@ export default class Player extends React.Component {
     sync: localStorage.getItem('hs_sync') === 'true' ? true : false,
     fadeOut: localStorage.getItem('hs_fadeout') === 'true' ? true : false,
     localPlaylist: {},
+    seeking: false,
   }
 
   constructor() {
@@ -187,6 +191,19 @@ export default class Player extends React.Component {
       });
     }
 
+    audio.oncanplay = () => {
+      this.setState({
+        seeking: false,
+      });
+    }
+
+    audio.onwaiting = () => {
+      this.setState({
+        seeking: true,
+      });
+    }
+
+
     emitter.addListener('change', darkTheme => {
       this.setState({
         darkTheme,
@@ -312,9 +329,11 @@ export default class Player extends React.Component {
             background: (() => {
               const url = getApiUrl('api', `/image/coverart/${this.state.track.id}?width=100`);
               return `url(${url}) no-repeat center`;
-            })()
+            })(),
+            filter: this.state.seeking ? 'blur(2px)' : 'blur(0px)',
           }}
-        ></div>
+        >
+        </div>
         <div id="hs_player_context">
 
           <ReactSimpleRange
