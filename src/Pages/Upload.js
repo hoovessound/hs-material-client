@@ -9,6 +9,7 @@ import { LinearProgress } from 'material-ui/Progress';
 import Input from 'material-ui/Input';
 import axios from 'axios';
 import getApiUrl from '../Utils/getApiUrl';
+import googleCacheImage from '../Utils/googleCacheImage';
 import { Redirect } from 'react-router-dom';
 
 import ArrowBack from 'material-ui-icons/ArrowBack';
@@ -194,23 +195,24 @@ export default class Upload extends React.Component {
                                     {
                                         (() => {
                                             if(this.state.uploadFade){
+                                                const source = googleCacheImage('http://www.stickpng.com/assets/images/580b57fcd9996e24bc43c450.png', null, 3.154e+7);
                                                 return (
                                                     <div id={'arrows'}>
                                                         <Typography>Upload An Track</Typography>
                                                         <img 
                                                             id={'arrow1'} 
                                                             alt="arrow"
-                                                            src="http://www.stickpng.com/assets/images/580b57fcd9996e24bc43c450.png" 
+                                                            src={source}
                                                         />
                                                         <img 
                                                             id={'arrow2'} 
                                                             alt="arrow"
-                                                            src="http://www.stickpng.com/assets/images/580b57fcd9996e24bc43c450.png" 
+                                                            src={source}
                                                         />
                                                         <img 
                                                             id={'arrow3'} 
                                                             alt="arrow"
-                                                            src="http://www.stickpng.com/assets/images/580b57fcd9996e24bc43c450.png" 
+                                                            src={source}
                                                         />
                                                     </div>
                                                 )
