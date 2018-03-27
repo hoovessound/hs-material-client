@@ -29,13 +29,14 @@ export default class Upload extends React.Component {
             local: upload from the user's computer
             youtube: import the track from YouTube
         */
-        source: 'lol',
-        selectionOpen: true,
+        source: 'local',
+        selectionOpen: false,
         uploadFade: true,
         gotPhoto: false,
         progressBarValue: 0,
         youtubeButtonDisable: false,
         youtubeButtonText: 'Upload',
+        arrowText: 'Upload A Track',
     }
 
     handelMenuClick(option){
@@ -78,12 +79,6 @@ export default class Upload extends React.Component {
         this.setState({
             selectionOpen: true,
         });
-    }
-
-    coverArtOnChange(e){
-        this.setState({
-            gotPhoto: true,
-        })
     }
 
     youtubeParser(url){
@@ -147,6 +142,20 @@ export default class Upload extends React.Component {
         });
     }
 
+    setCoverArtAsBackgroundImage(e){
+        const file = e.target.files[0];
+        if(file){
+            const fs = new FileReader();
+            fs.readAsDataURL(file);
+            fs.onload = () => {
+                this.setState({
+                    gotPhoto: true,
+                    imageBase64: fs.result,
+                });
+            }
+        }
+    }
+
     render(){
         return (
             <div id="upload">
@@ -197,8 +206,11 @@ export default class Upload extends React.Component {
                                             if(this.state.uploadFade){
                                                 const source = googleCacheImage('http://www.stickpng.com/assets/images/580b57fcd9996e24bc43c450.png', null, 3.154e+7);
                                                 return (
-                                                    <div id={'arrows'}>
-                                                        <Typography>Upload An Track</Typography>
+                                                    <div 
+                                                        id={'arrows'}
+                                                        ref={'audioFileContainer'}
+                                                    >
+                                                        <Typography>{this.state.arrowText}</Typography>
                                                         <img 
                                                             id={'arrow1'} 
                                                             alt="arrow"
@@ -220,7 +232,7 @@ export default class Upload extends React.Component {
                                         })()
                                     }
 
-                                    <form autocomplete={'off'} ref={'uploadForm'}>
+                                    <form autoComplete={'off'} ref={'uploadForm'}>
                                         <Fade in={this.state.uploadFade}>
                                             <Button
                                                 style={{
@@ -245,6 +257,19 @@ export default class Upload extends React.Component {
                                                        }}
                                                        name={'audio'}
                                                        accept={'audio/mp3,audio/mpeg,audio/ogg'}
+                                                       onDragOver={() => {
+                                                           this.refs.audioFileContainer.classList.add('animated');
+                                                           this.setState({
+                                                                arrowText: 'Drop it',
+                                                           });
+                                                       }}
+                                                       onDragLeave={() => {
+                                                           this.refs.audioFileContainer.classList.remove('animated');
+                                                           this.setState({
+                                                            arrowText: 'Upload a track',
+                                                       });
+
+                                                       }}
                                                 />
                                                 <MusicNote />
                                             </Button>
@@ -267,11 +292,17 @@ export default class Upload extends React.Component {
                                                     multiline={true}
                                                 />
                                                 <br />
+                                                <Typography>Cover art</Typography>
                                                 <Button
                                                     style={{
                                                         cursor: 'pointer',
-                                                        padding: '5em 10em',
+                                                        width: '15em',
+                                                        height: '15em',
                                                         backgroundSize: 'cover',
+                                                        backgroundImage:
+                                                                        this.state.imageBase64?
+                                                                        `url(${this.state.imageBase64})`:
+                                                                        null
                                                     }}
                                                     containerElement='label'
                                                     label='Upload a cover art for your track'>
@@ -285,7 +316,7 @@ export default class Upload extends React.Component {
                                                                opacity: 0,
                                                            }}
                                                            name={'image'}
-                                                           onChange={e => this.coverArtOnChange(e)}
+                                                           onChange={e => this.setCoverArtAsBackgroundImage(e)}
                                                            accept={'image/*'}
                                                     />
                                                     {

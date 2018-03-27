@@ -24,6 +24,10 @@
         transform: rotate(-222deg);
     }
 
+    &.animated{
+        animation: dancing 0.5s linear 0.5s infinite alternate;
+    }
+
     @media (max-width: 415px) {
         #arrow1{
             display: none;
@@ -40,6 +44,16 @@
 
         p{
             font-size: 1.1em;
+        }
+    }
+
+    @keyframes dancing {
+        0%{
+            transform: scale(1);
+        }
+
+        100%{
+            transform: scale(0.6);
         }
     }
 
