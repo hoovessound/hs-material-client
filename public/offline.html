@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>HoovesSound | Your Are Offline :/</title>
+</head>
+<body>
+  <div id="app">
+    <div id="top">
+      <h1 id="title">You Are Offline :/</h1>
+    </div>
+    <div id="context">
+      <h3>Looks like you don't have a internet connection after all</h3>
+      <div id="icon"></div>
+    </div>
+  </div>
+</body>
+</html>
+<style>
+    *{
+        padding: 0em;
+        margin: 0em;
+    }
+
+    #title{
+        background: #3f51b5;
+        color: #FFF;
+        padding: 0.5em;
+        margin-bottom: 0.5em;
+    }
+
+    #app{
+        text-align: center;
+    }
+
+    #icon{
+        background-image: url("data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzIwMCcgd2lkdGg9JzIwMCcgIGZpbGw9IiMwMDAwMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHZlcnNpb249IjEuMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAxMDAgMTAwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTU1LjM4OSwyOC4yMzljMy41OC0yLjEzMyw3LjUzNS0yLjU2NywxMS4xNTQtMS43MjcgIGMxLjc5NSwwLjQxNywzLjUwMiwxLjE0Niw1LjAzMywyLjEzNGMxLjU0MSwwLjk5NSwyLjkxMSwyLjI1Miw0LjAyNCwzLjcyMWMyLjEwMiwyLjc3MiwzLjI5Miw2LjI4NiwyLjk5MywxMC4xOTMgIGM3LjIyMSwwLjI5NCwxMi4xMzQsNC4yNzQsMTQuNjQ5LDkuNDk5YzEuMTcxLDIuNDMyLDEuODA5LDUuMTM5LDEuOTAzLDcuODYzYzAuMDk1LDIuNzEtMC4zNTMsNS40NDctMS4zNTEsNy45NiAgYy0yLjM4LDUuOTk0LTcuODEyLDEwLjY2OS0xNi4zODcsMTAuNjY5di0wLjAwOWgtMS42MjhsLTIuMzAxLTMuOTg0aDMuOTI5Vjc0LjU1YzYuNjcxLDAsMTAuODY4LTMuNTY1LDEyLjY4NC04LjEzNyAgYzAuNzkxLTEuOTkzLDEuMTQ2LTQuMTg0LDEuMDY5LTYuMzY2Yy0wLjA3NS0yLjE2OS0wLjU4Mi00LjMyMS0xLjUxMy02LjI1NGMtMi4xMzItNC40MjctNi41NzItNy42OC0xMy4yNTItNy4yMDl2MCAgYy0wLjE4OSwwLjAxMy0wLjM4NC0wLjAwMi0wLjU3OC0wLjA0NmMtMS4wNzQtMC4yNDYtMS43NDYtMS4zMTYtMS41LTIuMzkxYzAuODQ2LTMuNjM5LTAuMDQtNi45MTItMS45MDUtOS4zNzMgIGMtMC44MjgtMS4wOTItMS44NDgtMi4wMjgtMi45OTQtMi43NjhjLTEuMTU1LTAuNzQ1LTIuNDMzLTEuMjkzLTMuNzY4LTEuNjAzYy0zLjA0OS0wLjcwOC02LjQyOC0wLjE4Ni05LjM1NCwyLjAzM2wtMC4wMDMtMC4wMDMgIGMtMC44MjYsMC42MjUtMi4wMDcsMC41MTQtMi43LTAuMjc4Yy0yLjI2LTIuNTkyLTQuOTI0LTQuMzg3LTcuNzUyLTUuNDY0bC0yLjgyMi00Ljg4OUM0Ny40NzIsMjIuNTczLDUxLjc4OSwyNC42NTQsNTUuMzg5LDI4LjIzOSAgTDU1LjM4OSwyOC4yMzl6IE01Ny4xNzgsNzguNTQzbC0yLjMwMS0zLjk4NEgyMy4zOTh2LTAuMDA4Yy00Ljg5MSwwLTguNjYzLTIuMDM3LTExLjEyOS01LjAzOSAgYy0xLjYwNS0xLjk1NC0yLjY3NC00LjMyNi0zLjE1Mi02LjgyMmMtMC40NzgtMi40OTQtMC4zNjEtNS4xMDIsMC40MDQtNy41MjhjMS4xNzgtMy43MzIsMy45MjItNy4wNDksOC40MzMtOC44NTYgIGMwLjc4OS0wLjMxNiwxLjI2NC0xLjA4LDEuMjUyLTEuODgyYzAuMTc2LTUuOTM2LDIuNzQtMTAuNzQzLDYuNTA4LTE0LjAyN2MwLjgwNC0wLjcwMSwxLjY2NS0xLjMzMywyLjU3Mi0xLjg5NWwtMS45OTYtMy40NTcgIGMtMS4xMjUsMC42OTEtMi4xOTcsMS40NzYtMy4yMDEsMi4zNTFjLTQuMjk5LDMuNzQ4LTcuMyw5LjEyMy03LjgwNCwxNS43MjRjLTUuMDQxLDIuMzg4LTguMTY3LDYuMzgzLTkuNTc3LDEwLjg1NCAgYy0wLjk2NCwzLjA1OS0xLjExMyw2LjMzNy0wLjUxNCw5LjQ2NmMwLjYsMy4xMjcsMS45NTQsNi4xMTcsMy45OTcsOC42MDRjMy4xODYsMy44NzcsOC4wMDcsNi41MDgsMTQuMjA4LDYuNTA4di0wLjAwOEg1Ny4xNzh6Ij48L3BhdGg+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yMy40OTUsNy40ODNjLTAuNDY3LTAuODEzLTAuMTg3LTEuODQ5LDAuNjI1LTIuMzE2ICBjMC44MTMtMC40NjYsMS44NDktMC4xODYsMi4zMTYsMC42MjVsNTAuMDcsODYuNzI1YzAuNDY3LDAuODEyLDAuMTg3LDEuODQ5LTAuNjI2LDIuMzE0Yy0wLjgxMiwwLjQ2Ny0xLjg0OSwwLjE4Ny0yLjMxNC0wLjYyNSAgTDIzLjQ5NSw3LjQ4M3oiPjwvcGF0aD48L3N2Zz4=");
+        background-repeat: no-repeat;
+        width: 15em;
+        height: 10em;
+        left: 50%;
+        position: relative;
+        transform: translateX(-50%);
+    }
+</style>

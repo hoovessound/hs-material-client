@@ -1,0 +1,5 @@
+{
+  "name": "hs-material-client",
+  "restart": "always",
+  "domain": "hoovessound.ml"
+}
