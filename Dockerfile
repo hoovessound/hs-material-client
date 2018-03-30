@@ -12,6 +12,6 @@ RUN npm run build
 
 RUN npm install serve -g
 
-RUN serve -tns build
+CMD serve -tns build
 
 EXPOSE 5000
