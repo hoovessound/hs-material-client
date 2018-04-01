@@ -57,22 +57,57 @@ self.addEventListener('fetch', event => {
     return fetch(event.request);
   }
 
+  // Network first caching method
+
+  /*
+    Flow:
+    Online: API Call -> Network fetch -> Update cache
+    Offline (with cache): API Call -> Network fetch(Fail) -> Serve cache
+    Offline (without cache): API Call -> Network fetch(Fail) -> Serve cache(Fail) -> Serve offline.html -> IDK lol
+  */
+
   if(event.request.method === 'GET'){
     event.respondWith(
-      caches.open(_cacheName)
-      .then((cache) => {
-        return cache.match(event.request)
-        .then((response) => {
-          return response || fetch(event.request)
-          .then((response) => {
-            cache.put(event.request, response.clone());
-            return response;
+      caches.open(_cacheName).then(function(cache) {
+        return fetch(event.request)
+        .then(networkResponse => {
+          return caches.open(_cacheName)
+          .then(cache => {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
           })
-          .catch(() => {
+        })
+        .catch(() => {
+          return caches.open(_cacheName)
+          .then(cache => {
+            return cache.match(event.request)
+            .then(response => {
+              return response;
+            })
+          })
+        })
+        .catch(() => {
+          caches.open(_cacheName)
+          .then(cache => {
             return cache.match('/offline.html');
           })
-        });
+        })
       })
     );
   }
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys()
+    .then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if(cacheName !== _cacheName){
+            return caches.delete(cacheName);
+          }
+        })
+      )
+    })
+  );
 });
