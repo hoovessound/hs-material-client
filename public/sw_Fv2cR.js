@@ -57,6 +57,11 @@ self.addEventListener('fetch', event => {
     return fetch(event.request);
   }
 
+  if(event.request.url.startsWith('chrome-extension:')){
+    // Gogole chrome extension stuff, don't cache it, just serve it
+    return fetch(event.request);
+  }
+
   // Network first caching method
 
   /*
