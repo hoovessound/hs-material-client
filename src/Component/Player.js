@@ -118,6 +118,16 @@ export default class Player extends React.Component {
   }
 
   componentDidMount() {
+    window.addEventListener('offline', () => {
+      this.refs.networkStatusBar.classList.add('offline');
+      this.refs.hs_track_player.classList.add('offline');
+    });
+
+    window.addEventListener('online', () => {
+      this.refs.networkStatusBar.classList.remove('offline');
+      this.refs.hs_track_player.classList.remove('offline');
+    });
+
     window.onkeydown = (event) => this.hotKey(event);
     playerMmitter.addListener('play', track => {
       if(track.mute){
@@ -319,7 +329,9 @@ export default class Player extends React.Component {
 
   render() {
     return (
-      <div id="hs_track_player"
+      <div 
+        id="hs_track_player"
+        ref="hs_track_player"
         style={{
           background: this.state.darkTheme ? '#2f2f2f' : '#8f439c',
         }}
@@ -360,6 +372,8 @@ export default class Player extends React.Component {
                 color: '#CCC',
                 fontSize: '1em',
               }}
+              noWrap={true}
+              id="title"
             >{this.state.track.title || ''}</Typography>
           </div>
 
@@ -371,12 +385,20 @@ export default class Player extends React.Component {
             </Typography>
           </div>
 
-          <Button variant="fab" color="primary" id="playPauseButton"
-            onClick={() => this.playMusic(this.state.track)}
+          <Button 
+            variant="fab" 
+            color="primary" 
+            id="playPauseButton"
+            onClick={() => thi=s.playMusic(this.state.track)}
           >
             {this.state.playIcon}
           </Button>
-
+        </div>
+        {/* Offline status */}
+        <div id="networkStatusBar" ref="networkStatusBar">
+            <Typography>
+              Offline <span role="img" aria-label=":/">😐</span>
+            </Typography>
         </div>
       </div>
     )

@@ -6,10 +6,10 @@ import { emitter } from './NavBar';
 import isDarkTheme from '../Utils/isDarkTheme';
 import axios from 'axios';
 import getApiUrl from '../Utils/getApiUrl';
-import Notification from '../Component/Notification';
 import IconButton from 'material-ui/IconButton';
 import InsertPhoto from 'material-ui-icons/InsertPhoto';
 import Tooltip from 'material-ui/Tooltip';
+import { notificationEmitter } from '../Component/Notification';
 
 const styles = theme => ({
   container: {
@@ -54,7 +54,7 @@ class TextFieldMargins extends React.Component {
       comment: message,
     });
     if (!response.data.error) {
-      this.refs.notification.push({
+      notificationEmitter.emit('push', {
         message: 'Thank you for your comment',
       });
       this.setState({
@@ -64,14 +64,14 @@ class TextFieldMargins extends React.Component {
         this.props.onChange(response.data);
       }
     } else {
-      this.refs.notification.push({
+      notificationEmitter.emit('push', {
         message: 'Something when wrong :/',
       });
     }
   }
 
   async uploadPhoto(image) {
-    this.refs.notification.push({
+    notificationEmitter.emit('push', {
       message: 'Uploading',
     });
     const id = this.props.id;
@@ -98,11 +98,11 @@ class TextFieldMargins extends React.Component {
       });
     } else {
       if(response.status !== 200){
-        this.refs.notification.push({
+        notificationEmitter.emit('push', {
           message: 'File did not upload',
         });
       }else{
-        this.refs.notification.push({
+        notificationEmitter.emit('push', {
           message: response.data.error,
         });
       }
@@ -156,7 +156,6 @@ class TextFieldMargins extends React.Component {
             </form>
           </IconButton>
         </Tooltip>
-        <Notification ref={'notification'} />
       </div>
     );
   }

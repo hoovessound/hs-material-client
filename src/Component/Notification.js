@@ -1,6 +1,9 @@
 import React from 'react';
 import Button from 'material-ui/Button';
 import Snackbar from 'material-ui/Snackbar';
+import { EventEmitter } from 'fbemitter';
+
+export const notificationEmitter = new EventEmitter();
 
 export default class Notification extends React.Component {
 
@@ -16,6 +19,7 @@ export default class Notification extends React.Component {
       // Push a notification right a way
       this.push(this.props.push);
     }
+    notificationEmitter.addListener('push', payload => this.push(payload));
   }
 
   close(){

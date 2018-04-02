@@ -4,7 +4,7 @@ import Button from "material-ui/Button";
 import Switch from "material-ui/Switch";
 import isDarkTheme from '../Utils/isDarkTheme';
 import { emitter } from '../Component/NavBar';
-import Notification from '../Component/Notification';
+import { notificationEmitter } from '../Component/Notification';
 import { EventEmitter } from 'fbemitter';
 
 const SettingsEmmiter = new EventEmitter();
@@ -52,7 +52,7 @@ export default class Settings extends React.Component {
   }
 
   notify(){
-    this.refs.notification.push({
+    notificationEmitter.emit('push', {
       message: 'Your settings has been updated',
       button: 'yay',
     });
@@ -109,10 +109,6 @@ export default class Settings extends React.Component {
         <Button variant="raised" color="secondary">
           Delete Account
         </Button>
-
-        <Notification
-          ref="notification"
-        ></Notification>
       </div>
     )
   }

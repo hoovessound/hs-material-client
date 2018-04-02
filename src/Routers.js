@@ -11,7 +11,7 @@ import TrackPage from './Pages/Track';
 import MyPlaylist from './Pages/My/MyPlaylist';
 import AboutPrimePage from './Pages/AboutPrime';
 import UploadPage from './Pages/Upload';
-
+import Notification from './Component/Notification';
 
 import {
     BrowserRouter,
@@ -73,6 +73,7 @@ export default class Routers extends React.Component {
                         </Switch>
                     </div>
                     <Player/>
+                    <Notification ref={'notification'} />
                 </div>
             </BrowserRouter>
         )
