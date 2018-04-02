@@ -3,6 +3,7 @@
   position: fixed;
   bottom: 0em;
   height: 5em;
+  transition: bottom 0.2s ease-in-out;
 
   .coverart{
     width: 5em;
@@ -24,16 +25,34 @@
     transform: translateX(-50%);
   }
 
+  &.offline{
+    bottom: 2em;
+  }
+
+  #networkStatusBar{
+    background: #161616;
+    padding: 0.4em 1em;
+    transition: bottom 0.2s ease-in-out;
+
+    p,span{
+      color: #FFF;
+    }
+
+  }
+
   @media (max-width: 415px) {
     #hs_player_context{
-      width: 50%;
+      width: 90%;
+    }
+
+    #title{
+      width: 65%;
     }
 
     #playPauseButton{
-      position: fixed;
-      bottom: 2.2em;
-      right: 0.5em;
+      position: absolute;
+      bottom: 0.4em;
+      right: 1.5em;
     }
   }
-
 }

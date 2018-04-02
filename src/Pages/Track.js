@@ -228,7 +228,13 @@ export default class TrackPage extends React.Component {
                         const lines = lineByLine.length;
                         const previewLines = 3;
                         if(lines <= previewLines){
-                          return renderHTML(this.state.track.description);
+                          return (
+                            <Typography>
+                              {
+                                renderHTML(this.state.track.description)
+                              }
+                            </Typography>
+                          )
                         }else{
                           let preview = '';
                           for(let index = 0; index < previewLines; index++){
@@ -236,33 +242,34 @@ export default class TrackPage extends React.Component {
                           }
                           return (
                             <div id="readmore">
-                              {
-                                renderHTML(preview)
-                              }
-
-                              <div ref={'longText'} id={'longText'} style={this.state.descriptionStyle}>
+                              <Typography>
                                 {
-                                  (() => {
-                                      let text = '';
-                                      for(let index = previewLines; index < lines; index++){
-                                          text += `${lineByLine[index]} <BR />`;
-                                      };
-                                      return renderHTML(text);
-                                  })()
+                                  renderHTML(preview)
                                 }
-                              </div>
 
-                              <Button
-                                style={{
-                                  marginTop: '0.5em',
-                                }}
-                                onClick={e => this.toogleDescription()}
-                              >
-                                {
-                                  this.state.descriptionButton
-                                }
-                              </Button>
+                                <div ref={'longText'} id={'longText'} style={this.state.descriptionStyle}>
+                                  {
+                                    (() => {
+                                        let text = '';
+                                        for(let index = previewLines; index < lines; index++){
+                                            text += `${lineByLine[index]} <BR />`;
+                                        };
+                                        return renderHTML(text);
+                                    })()
+                                  }
+                                </div>
 
+                                <Button
+                                  style={{
+                                    marginTop: '0.5em',
+                                  }}
+                                  onClick={e => this.toogleDescription()}
+                                >
+                                  {
+                                    this.state.descriptionButton
+                                  }
+                                </Button>
+                              </Typography>
                             </div>
                           )
                         }
