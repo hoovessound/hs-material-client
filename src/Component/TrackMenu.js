@@ -1,6 +1,6 @@
 import React from 'react';
 import Menu, { MenuItem } from 'material-ui/Menu';
-import Notification from './Notification';
+import { notificationEmitter } from '../Component/Notification';
 
 class SimpleMenu extends React.Component {
   state = {
@@ -17,14 +17,14 @@ class SimpleMenu extends React.Component {
 
   fireReport(){
     const title = this.props.track.title;
-    this.refs[this.props.track.id + '_notification'].push({
+    notificationEmitter.emit('push', {
       message: `You have 🔥 a report on track ${title}`,
     });
     this.handleClose();
   }
 
   favorite(){
-    this.refs[this.props.track.id + '_notification'].push({
+    notificationEmitter.emit('push', {
       message: `Thank you for the ️❤️`,
     });
     this.handleClose();
@@ -45,9 +45,6 @@ class SimpleMenu extends React.Component {
           <MenuItem onClick={this.fireReport.bind(this)}><span role="img" aria-label="Report">✍️</span> Report</MenuItem>
           <MenuItem onClick={this.handleClose}><span role="img" aria-label="Dislike">👎</span> This track</MenuItem>
         </Menu>
-        <Notification 
-          ref={this.props.track.id + '_notification'}
-        />
       </div>
     );
   }
