@@ -1,6 +1,7 @@
 import React from 'react';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import { notificationEmitter } from '../Component/Notification';
+import Emojify from 'react-emojione';
 
 class SimpleMenu extends React.Component {
   state = {
@@ -18,14 +19,14 @@ class SimpleMenu extends React.Component {
   fireReport(){
     const title = this.props.track.title;
     notificationEmitter.emit('push', {
-      message: `You have 🔥 a report on track ${title}`,
+      message: `You have :fire: a report on track ${title}`,
     });
     this.handleClose();
   }
 
   favorite(){
     notificationEmitter.emit('push', {
-      message: `Thank you for the ️❤️`,
+      message: `Thank you for the :heart:`,
     });
     this.handleClose();
   }
@@ -41,9 +42,27 @@ class SimpleMenu extends React.Component {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          <MenuItem onClick={this.favorite.bind(this)}><span role="img" aria-label="Favorite">❤️</span> Favorite</MenuItem>
-          <MenuItem onClick={this.fireReport.bind(this)}><span role="img" aria-label="Report">✍️</span> Report</MenuItem>
-          <MenuItem onClick={this.handleClose}><span role="img" aria-label="Dislike">👎</span> This track</MenuItem>
+          <MenuItem onClick={this.favorite.bind(this)}>
+            <Emojify style={{height: 17, width: 17}}>
+              :heart:
+            </Emojify>
+            Favorite
+          </MenuItem>
+
+          <MenuItem onClick={this.fireReport.bind(this)}>
+            <Emojify style={{height: 17, width: 17}}>
+              :writing_hand:
+            </Emojify>
+            Report
+          </MenuItem>
+
+          <MenuItem onClick={this.fireReport.bind(this)}>
+            <Emojify style={{height: 17, width: 17}}>
+              :thumbsdown:
+            </Emojify>
+            This track
+          </MenuItem>
+
         </Menu>
       </div>
     );

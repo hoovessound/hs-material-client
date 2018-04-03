@@ -2,6 +2,7 @@ import React from 'react';
 import Button from 'material-ui/Button';
 import Snackbar from 'material-ui/Snackbar';
 import { EventEmitter } from 'fbemitter';
+import Emojify from 'react-emojione';
 
 export const notificationEmitter = new EventEmitter();
 
@@ -60,7 +61,11 @@ export default class Notification extends React.Component {
         SnackbarContentProps={{
           'aria-describedby': 'message-id',
         }}
-        message={<span id="message-id">{this.state.message}</span>}
+        message={
+          <Emojify style={{height: 17, width: 17}}>
+            <span id="message-id">{this.state.message}</span>
+          </Emojify>
+        }
         action={actions}
       />
     )
