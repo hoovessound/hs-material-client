@@ -37,6 +37,7 @@ export default class Upload extends React.Component {
         youtubeButtonDisable: false,
         youtubeButtonText: 'Upload',
         arrowText: 'Upload A Track',
+        uploadButtonDisabled: false,
     }
 
     handelMenuClick(option){
@@ -91,6 +92,9 @@ export default class Upload extends React.Component {
     }
 
     async upload(){
+        this.setState({
+            uploadButtonDisabled: true,
+        });
         const form = new FormData(this.refs.uploadForm);
         const config = {
             headers: {
@@ -334,7 +338,7 @@ export default class Upload extends React.Component {
                                                     }
                                                 </Button>
                                                 <br />
-                                                <Button variant="raised" color="primary" onClick={e => this.upload(e)}>Upload</Button>
+                                                <Button variant="raised" color="primary" onClick={e => this.upload(e)} disabled={this.state.uploadButtonDisabled} >Upload</Button>
                                             </div>
 
                                         </Fade>
