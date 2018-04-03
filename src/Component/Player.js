@@ -389,7 +389,7 @@ export default class Player extends React.Component {
             variant="fab" 
             color="primary" 
             id="playPauseButton"
-            onClick={() => thi=s.playMusic(this.state.track)}
+            onClick={() => this.playMusic(this.state.track)}
           >
             {this.state.playIcon}
           </Button>
