@@ -17,6 +17,7 @@ import SettingPage from '../Pages/Setting';
 import getApiUrl from '../Utils/getApiUrl';
 import * as socketIoAuth from '../Utils/socketIoAuth';
 import { CircularProgress } from 'material-ui/Progress';
+import Emojify from 'react-emojione';
 
 import Fade from 'material-ui/transitions/Fade';
 
@@ -397,7 +398,10 @@ export default class Player extends React.Component {
         {/* Offline status */}
         <div id="networkStatusBar" ref="networkStatusBar">
             <Typography>
-              Offline <span role="img" aria-label=":/">😐</span>
+              Offline
+              <Emojify style={{height: 17, width: 17}}>
+                :neutral_face:
+              </Emojify>
             </Typography>
         </div>
       </div>

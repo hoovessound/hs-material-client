@@ -13,8 +13,16 @@ import { Link } from 'react-router-dom';
 import ComentInputField from '../Component/CommentInputField';
 import renderHTML from 'react-render-html';
 import Linkify from 'react-linkify';
+import Dialog from 'material-ui/Dialog';
+import Tabs, { Tab } from 'material-ui/Tabs';
+import IconButton from 'material-ui/IconButton';
+import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
+import Input from 'material-ui/Input';
+import { notificationEmitter } from '../Component/Notification';
 
 import '../SCSS/TrackPage.scss';
+
+import ListIcon from 'material-ui-icons/List';
 
 const imageRegex = /(https?:\/\/.*\.(?:png|jpg))/ig;
 
@@ -30,6 +38,8 @@ export default class TrackPage extends React.Component {
     },
     descriptionButton: 'Show More',
     descriptionOpen: false,
+    playlistIsOpen: false,
+    playlistIndex: 0,
   }
 
   async fetchTrack() {
@@ -152,7 +162,89 @@ export default class TrackPage extends React.Component {
     }
   }
 
+  eachPlaylist(data) {
+    return data.map(playlist => {
+      return (
+          <ListItem key={playlist.id} dense >
+            <img 
+              src={getApiUrl('api', `/image/playlist/${playlist.id}?width=100`)}
+              alt={`${playlist.title} cover art`}
+              className="coverArt"
+              imageStyle={{
+                width: '3em',
+                height: '3em',
+              }}
+            />
+            <Link to={`/playlist/${playlist.id}`}>
+              <ListItemText primary={playlist.title} />
+            </Link>
+            <ListItemSecondaryAction>
+              <Button onClick={() => this.addToPlaylist({id: playlist.id})}>Add</Button>
+            </ListItemSecondaryAction>
+          </ListItem>
+      )
+    })
+  }
+
+  async createNewPlaylist(payload){
+    this.setState({
+      playlistIsOpen: false,
+    });
+    notificationEmitter.emit('push', {
+      message: 'Playlist created',
+       button: 'yay',
+    });
+    const title = payload.title;
+    const id = payload.id;
+    const url = getApiUrl('api', '/playlist/create');
+    const response = await axios.post(url, {
+        title,
+        tracks: [
+            id,
+        ]
+    });
+    const playlist = response.data;
+    // Update the local playlist array
+    const playlists = this.state.playlists;
+    playlists.push({
+        id: playlist.id,
+        title: playlist.title,
+        author: playlist.author,
+        tracks: playlist.tracks,
+    });
+    this.setState({
+        playlists,
+    });
+  }
+
+  async addToPlaylist(playlist){
+    this.setState({
+      playlistIsOpen: false,
+    });
+    notificationEmitter.emit('push', {
+      message: 'Added To Playlist',
+      button: 'yay',
+    });
+    const url = getApiUrl('api', `/playlist/add/${playlist.id}/${this.state.track.id}?`);
+    await axios.post(url);
+  }
+
+  async fetchUserPlaylist(){
+    const url = getApiUrl('api', '/me/playlists');
+    const response = await axios.get(url);
+    if(!response.data.error){
+      this.setState({
+        playlists: response.data,
+      })
+    }
+  }
+
   render() {
+
+    if(this.state.playlistIsOpen && this.state.playlistIndex === 0 && typeof this.state.playlists === 'undefined'){
+      this.fetchUserPlaylist();
+    }
+
     if (!this.state.track) {
       return (
         <AbsoluteCenter>
@@ -168,6 +260,78 @@ export default class TrackPage extends React.Component {
       // With track data
       return (
         <div key={this.state.track.id} id={this.state.track.id}>
+
+          <Dialog onClose={() => this.setState({playlistIsOpen: false})} open={this.state.playlistIsOpen}>
+            <Tabs value={this.state.playlistIndex} onChange={(e, value) => this.setState({playlistIndex: value})}>
+              <Tab label="Add To Playlist" />
+              <Tab label="Create New One" />
+            </Tabs>
+            {
+              (() => {
+                if(this.state.playlistIndex === 0){
+                  // Add existing playlist
+                  return (
+                    <Typography component="div" style={{ padding: 8 * 3 }}>
+                      {
+                        (() => {
+                          if(this.state.playlists){
+                            return (
+                              <List>
+                                {
+                                  this.eachPlaylist(this.state.playlists)
+                                }
+                              </List>
+                            )
+                          }else{
+                            return <CircularProgress />;
+                          }
+                        })()
+                      }
+                    </Typography>
+                  )
+                }
+              })()
+            }
+
+            {
+              (() => {
+                if(this.state.playlistIndex === 1){
+                  // Add existing playlist
+                  return (
+                    <Typography component="div" style={{ padding: 8 * 3 }}>
+                      <Input
+                        placeholder="Playlist Name"
+                        ref="inputField"
+                        onKeyDown={evt => {
+                          const charCode = evt.which || evt.charCode || evt.keyCode || 0;
+                          if (charCode === 13) {
+                            // ENTER
+                            const text = evt.target.value.trim();
+                            if (text.length >= 1) {
+                              // Valid
+                              this.createNewPlaylist({
+                                title: text,
+                                id: this.state.track.id,
+                              });
+                            }
+                          }
+                        }}
+                        onChange={e => {
+                          this.setState({
+                            value: e.target.value,
+                          });
+                        }}
+                        value={this.state.value}
+                        onPaste={e => this.onPaste(e)}
+                      />
+                      <br />
+                      <Button onClick={() => this.createNewPlaylist({title: this.state.value, id: this.state.track.id})}>Save</Button>
+                    </Typography>
+                  )
+                }
+              })()
+            }
+          </Dialog>
 
           <div id="track_details">
 
@@ -212,6 +376,12 @@ export default class TrackPage extends React.Component {
                   @{this.state.track.author.username}
                 </Link>
               </Typography>
+
+              <IconButton
+                onClick={() => this.setState({playlistIsOpen: true})}
+              >
+                <ListIcon />
+              </IconButton>
 
               <hr
                 style={{
