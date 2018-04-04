@@ -9,6 +9,7 @@ import axios from 'axios';
 import getApiUrl from '../../Utils/getApiUrl';
 import googleCacheImage from '../../Utils/googleCacheImage';
 import GridList, { GridListTile, GridListTileBar } from 'material-ui/GridList';
+import { Link } from 'react-router-dom';
 
 export default class MyPlaylist extends React.Component {
 
@@ -67,7 +68,11 @@ export default class MyPlaylist extends React.Component {
               />
             </Button>
             <GridListTileBar
-              title={playlist.title}
+              title={
+                <Link to={`/playlist/${playlist.id}`}>
+                  {playlist.title}
+                </Link>
+              }
             />
           </GridListTile>
         )

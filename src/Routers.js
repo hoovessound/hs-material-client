@@ -12,6 +12,7 @@ import MyPlaylist from './Pages/My/MyPlaylist';
 import AboutPrimePage from './Pages/AboutPrime';
 import UploadPage from './Pages/Upload';
 import Notification from './Component/Notification';
+import PlaylistPage from './Pages/Playlist';
 
 import {
     BrowserRouter,
@@ -68,6 +69,7 @@ export default class Routers extends React.Component {
                             
                             <Route exact path="/@:username" component={ProfilePage}/>
                             <Route exact path="/track/:id" component={TrackPage}/>
+                            <Route exact path="/playlist/:id" component={PlaylistPage}/>
                             <Route exact path="/:offset?" component={HomePage}/>
                             <Route component={Page404}/>
                         </Switch>
