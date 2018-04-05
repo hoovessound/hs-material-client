@@ -253,11 +253,6 @@ export default class Player extends React.Component {
   }
 
   async playMusic(track, sync=false) {
-
-    setTimeout(() => {
-      this.playlistNextTrack();
-    }, 3000);
-
     // Update the local playlist indexes
     playlistIndex = this.state.playlistPointers.indexOf(track.id);
 
