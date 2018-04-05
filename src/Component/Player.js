@@ -22,10 +22,11 @@ import Emojify from 'react-emojione';
 import Fade from 'material-ui/transitions/Fade';
 
 const settingPage = new SettingPage();
-const playerMmitter = new EventEmitter;
+export const playerEmitter = new EventEmitter();
 const audio = new Audio();
 let currentId;
 let updateLastPlayEvent;
+let playlistIndex = 0; // The current playing track indexes
 
 function formatTime(seconds) {
   let minutes = Math.floor(seconds / 60);
@@ -51,13 +52,11 @@ export default class Player extends React.Component {
     darkTheme: isDarkTheme(),
     sync: localStorage.getItem('hs_sync') === 'true' ? true : false,
     fadeOut: localStorage.getItem('hs_fadeout') === 'true' ? true : false,
-    localPlaylist: {},
     seeking: false,
-  }
 
-  constructor() {
-    super();
-    this.emitter = playerMmitter;
+    // Local playlist
+    playlistPointers: [], // Store all the tracks IDs for reference
+    playlistTracks: [], // Store all the track details
   }
 
   fadeOut(){
@@ -76,15 +75,17 @@ export default class Player extends React.Component {
   }
 
   addTrackIntoLocalPlaylist(tracks){
-    const localPlaylist = this.state.localPlaylist;
+    const playlistPointers = this.state.playlistPointers;
+    const playlistTracks = this.state.playlistTracks;
+    // Check for duplicates
     tracks.map(track => {
-      if(!localPlaylist[track.id]){
-        localPlaylist[track.id]=  track;
-        this.setState({
-          localPlaylist
-        });
+      if(!playlistPointers.includes(track.id)){
+        // No duplicates
+        playlistPointers.push(track.id);
+        playlistTracks.push(track);
       }
     });
+    console.log(playlistTracks);
   }
 
   hotKey(evt) {
@@ -130,7 +131,7 @@ export default class Player extends React.Component {
     });
 
     window.onkeydown = (event) => this.hotKey(event);
-    playerMmitter.addListener('play', track => {
+    playerEmitter.addListener('play', track => {
       if(track.mute){
         audio.muted = true;
       }
@@ -158,7 +159,7 @@ export default class Player extends React.Component {
       })
     });
 
-    playerMmitter.addListener('localplaylist.add', track => this.addTrackIntoLocalPlaylist(track));
+    playerEmitter.addListener('localplaylist.add', tracks => this.addTrackIntoLocalPlaylist(tracks));
 
     audio.ontimeupdate = () => {
 
@@ -214,6 +215,11 @@ export default class Player extends React.Component {
       });
     }
 
+    audio.onended = () => {
+      // Play the next track on the local playlsit
+      this.playlistNextTrack();
+    }
+
 
     emitter.addListener('change', darkTheme => {
       this.setState({
@@ -236,7 +242,24 @@ export default class Player extends React.Component {
     emitter.addListener('loadUserHistory', history => this.loadUserHistory(history));
   }
 
+  playlistNextTrack(){
+    playlistIndex = (playlistIndex + 1);
+    this.playMusic(this.state.playlistTracks[playlistIndex]);
+  }
+
+  playlistPreviousTrack(){
+    playlistIndex = (playlistIndex - 1);
+    this.playMusic(this.state.playlistTracks[playlistIndex]);
+  }
+
   async playMusic(track, sync=false) {
+
+    setTimeout(() => {
+      this.playlistNextTrack();
+    }, 3000);
+
+    // Update the local playlist indexes
+    playlistIndex = this.state.playlistPointers.indexOf(track.id);
 
     if(this.state.sync){
       if (updateLastPlayEvent) clearTimeout(updateLastPlayEvent);
@@ -299,9 +322,11 @@ export default class Player extends React.Component {
     }
 
     if ('mediaSession' in navigator) {
+
       navigator.mediaSession.setActionHandler('play', () => {
         audio.play();
       });
+
       navigator.mediaSession.setActionHandler('pause', () => {
         if(this.state.fadeOut){
           this.fadeOut();
@@ -309,22 +334,25 @@ export default class Player extends React.Component {
           audio.pause();
         }
       });
+
+      navigator.mediaSession.setActionHandler('previoustrackplay', () => {
+        this.playlistPreviousTrack();
+      });
+
+      navigator.mediaSession.setActionHandler('previoustrackplay', () => {
+        this.playlistNextTrack();
+      });
+      
     }
 
-    try{
-      if (audio.paused) {
-        await audio.play();
-      } else {
-        if(this.state.fadeOut){
-          this.fadeOut();
-        }else{
-          await audio.pause();
-        }
+    if (audio.paused) {
+      await audio.play();
+    } else {
+      if(this.state.fadeOut){
+        this.fadeOut();
+      }else{
+        await audio.pause();
       }
-    }
-    catch(error){
-      console.error(error);
-      this.playMusic(track);
     }
   }
 

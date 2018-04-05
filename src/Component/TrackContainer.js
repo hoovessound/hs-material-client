@@ -2,15 +2,13 @@ import React from 'react';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import MoreVert from 'material-ui-icons/MoreVert';
-import Player from './Player';
+import { playerEmitter } from './Player';
 import {emitter} from './NavBar';
 import isDarkTheme from '../Utils/isDarkTheme';
 import { GridListTile, GridListTileBar } from 'material-ui/GridList';
 import TrackMenu from './TrackMenu';
 import { Link } from 'react-router-dom';
 import googleCacheImage from '../Utils/googleCacheImage';
-
-const player = new Player();
 
 export default class TrackContainer extends React.Component {
 
@@ -46,7 +44,7 @@ export default class TrackContainer extends React.Component {
           className="track_cover_art"
 
           onClick={() => {
-            player.emitter.emit('play', {
+            playerEmitter.emit('play', {
               ...track,
               mute,
             });

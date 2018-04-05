@@ -8,6 +8,7 @@ import Typography from 'material-ui/Typography';
 import isDarkTheme from '../Utils/isDarkTheme';
 import {emitter} from '../Component/NavBar';
 import AbsoluteCenter from '../Component/AbsoluteCenter';
+import { playerEmitter } from '../Component/Player';
 
 import InfiniteScroll from 'react-infinite-scroller';
 import Grow from 'material-ui/transitions/Grow';
@@ -39,6 +40,7 @@ export default class HomePage extends React.Component {
         const url = getApiUrl('api', `/tracks?offset=${offset}`);
         const response = await axios.get(url);
         if(!response.data.error){
+            playerEmitter.emit('localplaylist.add', response.data);
             this.setState({
                 tracks: response.data,
                 offset: (offset + 10),
@@ -65,6 +67,7 @@ export default class HomePage extends React.Component {
             if (!response.data.error) {
 
                 response.data.map(track => {
+                    playerEmitter.emit('localplaylist.add', response.data);
                     return tracks.push(track);
                 });
                 this.setState({
