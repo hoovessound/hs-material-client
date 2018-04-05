@@ -23,6 +23,7 @@ const preCacheList = [
 
   // The HoovesSound logo
   '/favicon.ico',
+  'https://storage.googleapis.com/hs-static/favicon.png',
 ];
 
 self.addEventListener('install', event => {

@@ -108,7 +108,7 @@ export default class HomePage extends React.Component {
                             pageStart={0}
                             loadMore={() => this.fetchTracks()}
                             hasMore={this.state.hasMore}
-
+                            threshold={0}
                             loader=
                                 {
                                     <div
