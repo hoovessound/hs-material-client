@@ -21,7 +21,7 @@ import { Link } from 'react-router-dom';
 import isDarkTheme from '../Utils/isDarkTheme';
 import { EventEmitter } from 'fbemitter';
 import googleCacheImage from '../Utils/googleCacheImage';
-
+import * as globalObject from '../Utils/globalObject';
 
 // Icons
 import ListIcon from 'material-ui-icons/List';
@@ -32,10 +32,7 @@ import AttachMoney from "material-ui-icons/AttachMoney";
 import CloudUpload from "material-ui-icons/CloudUpload";
 import getApiUrl from "../Utils/getApiUrl";
 
-const emitter = new EventEmitter();
-export {
-  emitter,
-}
+export const emitter = new EventEmitter();
 
 const styles = {
   root: {
@@ -66,6 +63,7 @@ class MenuAppBar extends React.Component {
   async fetchUserInfo(cb){
     const response = await axios.get(getApiUrl('api', '/me'));
     if(!response.data.error){
+      globalObject.set('user', response.data);
       this.setState({
         user: response.data,
       });

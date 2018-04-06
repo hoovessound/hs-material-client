@@ -13,20 +13,34 @@ import { Link } from 'react-router-dom';
 import ComentInputField from '../Component/CommentInputField';
 import renderHTML from 'react-render-html';
 import Linkify from 'react-linkify';
-import Dialog from 'material-ui/Dialog';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from 'material-ui/Dialog';
 import Tabs, { Tab } from 'material-ui/Tabs';
+import Tooltip from 'material-ui/Tooltip';
 import IconButton from 'material-ui/IconButton';
 import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
 import Input from 'material-ui/Input';
 import { notificationEmitter } from '../Component/Notification';
+import * as globalObject from '../Utils/globalObject';
+import TextField from 'material-ui/TextField';
 
 import '../SCSS/TrackPage.scss';
 
 import ListIcon from 'material-ui-icons/List';
+import CreateIcon from 'material-ui-icons/Create';
+
+import Slide from 'material-ui/transitions/Slide';
 
 const imageRegex = /(https?:\/\/.*\.(?:png|jpg))/ig;
 
 const player = new Player();
+
+function Transition(props) {
+  return <Slide direction="up" {...props} />;
+}
 
 export default class TrackPage extends React.Component {
 
@@ -40,6 +54,8 @@ export default class TrackPage extends React.Component {
     descriptionOpen: false,
     playlistIsOpen: false,
     playlistIndex: 0,
+    editIsOpen: false,
+    isOwner: false,
   }
 
   async fetchTrack() {
@@ -50,6 +66,24 @@ export default class TrackPage extends React.Component {
       this.setState({
         track: response.data,
       });
+      let user = globalObject.get('user');
+      if(user){
+        if(user.id === response.data.author.id){
+          this.setState({
+            isOwner: true,
+          });
+        }
+      }else{
+        globalObject.emitter.addListener('set', payload => {
+          if(payload.name === 'user'){
+            if(user.id === response.data.author.id){
+              this.setState({
+                isOwner: true,
+              });
+            }
+          }
+        })
+      }
       this.fetchComments();
     }
   }
@@ -239,6 +273,43 @@ export default class TrackPage extends React.Component {
     }
   }
 
+  async updateTrack(){
+    let title = this.state.trackTitle;
+    let description = this.state.trackDescription;
+    const track = this.state.track;
+
+    if(!title){
+      title = track.title;
+    }else{
+      track.title = title;
+    }
+
+    if(!description){
+      description = track.description;
+    }else{
+      track.description = description;
+    }
+
+    const url = getApiUrl('api', `/track/edit/${this.state.track.id}`);
+    this.setState({
+      track,
+      editIsOpen: false,
+    });
+    notificationEmitter.emit('push', {
+      message: 'Saved :kissing_smiling_eyes:',
+    });
+    const form = new FormData();
+    form.append('title', title);
+    form.append('description', description);
+    const config = {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+    };
+    await axios.post(url, form, config);
+    const modal = this.state.modal;
+  }
+
   render() {
 
     if(this.state.playlistIsOpen && this.state.playlistIndex === 0 && typeof this.state.playlists === 'undefined'){
@@ -261,7 +332,63 @@ export default class TrackPage extends React.Component {
       return (
         <div key={this.state.track.id} id={this.state.track.id}>
 
-          <Dialog onClose={() => this.setState({playlistIsOpen: false})} open={this.state.playlistIsOpen}>
+        {
+          (() => {
+            if(this.state.isOwner){
+              return (
+
+                <Dialog
+                  open={this.state.editIsOpen}
+                  transition={Transition}
+                  keepMounted
+                  onClose={() => this.setState({editIsOpen: false})}
+                >
+                  <DialogTitle>
+                    Editing Your Track
+                  </DialogTitle>
+                  <DialogContent>
+
+                    <TextField
+                      label="Title"
+                      defaultValue={renderHTML(this.state.track.title)}
+                      margin="normal"
+                      style={{
+                        width: '40vw',
+                      }}
+                      onInput={e => this.setState({trackTitle: e.target.value})}
+                    />
+
+                    <TextField
+                      label="Description"
+                      multiline
+                      rows="10"
+                      defaultValue={renderHTML(this.state.track.description)}
+                      margin="normal"
+                      style={{
+                        width: '40vw',
+                      }}
+                      onInput={e => this.setState({trackDescription: e.target.value})}
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={() => this.setState({editIsOpen: false})} color="primary">
+                      Cancel
+                    </Button>
+                    <Button onClick={() => this.updateTrack()} color="primary">
+                      Save
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              )
+            }
+          })()
+        }
+
+          <Dialog 
+            onClose={() => this.setState({playlistIsOpen: false})} 
+            open={this.state.playlistIsOpen}
+            transition={Transition}
+          >
             <Tabs value={this.state.playlistIndex} onChange={(e, value) => this.setState({playlistIndex: value})}>
               <Tab label="Add To Playlist" />
               <Tab label="Create New One" />
@@ -364,7 +491,11 @@ export default class TrackPage extends React.Component {
                   color: this.state.darkTheme ? '#FFF' : '#161616',
                 }}
               >
-                {this.state.track.title}
+                {
+                  renderHTML(
+                    this.state.track.title
+                  )
+                }
               </Typography>
 
               <Typography
@@ -377,11 +508,29 @@ export default class TrackPage extends React.Component {
                 </Link>
               </Typography>
 
-              <IconButton
-                onClick={() => this.setState({playlistIsOpen: true})}
-              >
-                <ListIcon />
-              </IconButton>
+              <Tooltip title={'Playlist'} >
+                <IconButton
+                  onClick={() => this.setState({playlistIsOpen: true})}
+                >
+                  <ListIcon />
+                </IconButton>
+              </Tooltip>
+
+              {
+                (() => {
+                  if(this.state.isOwner){
+                    return (
+                      <Tooltip title={'Edit'} >
+                        <IconButton
+                          onClick={() => this.setState({editIsOpen: true})}
+                        >
+                          <CreateIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )
+                  }
+                })()
+              }
 
               <hr
                 style={{
@@ -401,7 +550,9 @@ export default class TrackPage extends React.Component {
                           return (
                             <Typography>
                               {
-                                renderHTML(this.state.track.description)
+                                renderHTML(
+                                  this.state.track.description
+                                )
                               }
                             </Typography>
                           )

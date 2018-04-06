@@ -9,7 +9,6 @@ import { LinearProgress } from 'material-ui/Progress';
 import Input from 'material-ui/Input';
 import axios from 'axios';
 import getApiUrl from '../Utils/getApiUrl';
-import googleCacheImage from '../Utils/googleCacheImage';
 import { Redirect } from 'react-router-dom';
 
 import ArrowBack from 'material-ui-icons/ArrowBack';
