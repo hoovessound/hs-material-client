@@ -363,7 +363,7 @@ export default class Upload extends React.Component {
                                                (() => {
                                                    if(this.state.isYouTubeUrl){
                                                        return (
-                                                           <Button variant="raised" color="primary" onClick={e => this.youtubeImport(e)} disable={this.state.youtubeButtonDisable}>{this.state.youtubeButtonText}</Button>
+                                                           <Button variant="raised" color="primary" onClick={e => this.youtubeImport(e)} disabled={this.state.youtubeButtonDisable}>{this.state.youtubeButtonText}</Button>
                                                        )
                                                    }else{
                                                        return(
