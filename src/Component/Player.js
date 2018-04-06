@@ -85,7 +85,6 @@ export default class Player extends React.Component {
         playlistTracks.push(track);
       }
     });
-    console.log(playlistTracks);
   }
 
   hotKey(evt) {
