@@ -115,6 +115,7 @@ export default class HomePage extends React.Component {
                             loader=
                                 {
                                     <div
+                                        key={'trackLoader'}
                                         style={{
                                             textAlign: 'center',
                                         }}
