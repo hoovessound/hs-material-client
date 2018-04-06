@@ -330,11 +330,11 @@ export default class Player extends React.Component {
         }
       });
 
-      navigator.mediaSession.setActionHandler('previoustrackplay', () => {
+      navigator.mediaSession.setActionHandler('previoustrack', () => {
         this.playlistPreviousTrack();
       });
 
-      navigator.mediaSession.setActionHandler('previoustrackplay', () => {
+      navigator.mediaSession.setActionHandler('nexttrack', () => {
         this.playlistNextTrack();
       });
       
