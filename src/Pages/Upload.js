@@ -16,6 +16,7 @@ import ArrowBack from 'material-ui-icons/ArrowBack';
 import MusicNote from 'material-ui-icons/MusicNote';
 import InsertPhoto from 'material-ui-icons/InsertPhoto';
 import CheckCircle from 'material-ui-icons/CheckCircle';
+import ArrowDownward from 'material-ui-icons/ArrowDownward';
 
 import Fade from 'material-ui/transitions/Fade';
 
@@ -148,7 +149,7 @@ export default class Upload extends React.Component {
 
     setCoverArtAsBackgroundImage(e){
         const file = e.target.files[0];
-        if(file){
+        if(file && file.type.includes('image')){
             const fs = new FileReader();
             fs.readAsDataURL(file);
             fs.onload = () => {
@@ -208,28 +209,15 @@ export default class Upload extends React.Component {
                                     {
                                         (() => {
                                             if(this.state.uploadFade){
-                                                const source = googleCacheImage('http://www.stickpng.com/assets/images/580b57fcd9996e24bc43c450.png', null, 3.154e+7);
                                                 return (
                                                     <div 
                                                         id={'arrows'}
                                                         ref={'audioFileContainer'}
                                                     >
                                                         <Typography>{this.state.arrowText}</Typography>
-                                                        <img 
-                                                            id={'arrow1'} 
-                                                            alt="arrow"
-                                                            src={source}
-                                                        />
-                                                        <img 
-                                                            id={'arrow2'} 
-                                                            alt="arrow"
-                                                            src={source}
-                                                        />
-                                                        <img 
-                                                            id={'arrow3'} 
-                                                            alt="arrow"
-                                                            src={source}
-                                                        />
+                                                        <ArrowDownward id="arrow1"/>
+                                                        <ArrowDownward id="arrow2"/>
+                                                        <ArrowDownward id="arrow3"/>
                                                     </div>
                                                 )
                                             }
