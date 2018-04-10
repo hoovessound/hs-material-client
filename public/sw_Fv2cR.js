@@ -24,6 +24,9 @@ const preCacheList = [
   // The HoovesSound logo
   '/favicon.ico',
   'https://storage.googleapis.com/hs-static/favicon.png',
+
+  // Emoji one sheet
+  'https://github.com/pladaria/react-emojione/blob/emojione3/assets/sprites/emojione-3.1.2-64x64.png?raw=true',
 ];
 
 self.addEventListener('install', event => {
@@ -67,6 +70,26 @@ self.addEventListener('fetch', event => {
     return fetch(event.request);
   }
 
+  if(event.request.url.includes('hoovessound') && event.request.url.includes('/image/')){
+    // HoovesSound Image API
+    // Serive cache version first
+    caches.open(_cacheName).then((cache) => {
+      return cache.match(event.request).then((response) => {
+        if (response) {
+          fetch(event.request).then((response) => {
+            cache.put(event.request, response.clone());
+          });
+          return response;
+        }else{
+          return fetch(event.request).then((response) => {
+            cache.put(event.request, response.clone());
+            return response;
+          });
+        }
+      })
+    });
+  }
+
   // Network first caching method
 
   /*
@@ -78,8 +101,7 @@ self.addEventListener('fetch', event => {
 
   if(event.request.method === 'GET'){
     event.respondWith(
-      caches.open(_cacheName).then(function(cache) {
-        return fetch(event.request)
+       fetch(event.request)
         .then(networkResponse => {
           return caches.open(_cacheName)
           .then(cache => {
@@ -92,17 +114,17 @@ self.addEventListener('fetch', event => {
           .then(cache => {
             return cache.match(event.request)
             .then(response => {
-              return response;
+              if(response){
+                return response;
+              }else{
+                return cache.match('/offline.html')
+                .then(response => {
+                  return response;
+                })
+              }
             })
           })
         })
-        .catch(() => {
-          caches.open(_cacheName)
-          .then(cache => {
-            return cache.match('/offline.html');
-          })
-        })
-      })
     );
   }
 });
