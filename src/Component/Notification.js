@@ -66,7 +66,13 @@ export default class Notification extends React.Component {
             <span id="message-id">{this.state.message}</span>
           </Emojify>
         }
-        action={actions}
+        action={
+          <Emojify style={{height: 17, width: 17}}>
+            {
+              actions
+            }
+          </Emojify>
+        }
       />
     )
   }

@@ -12,7 +12,6 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import ComentInputField from '../Component/CommentInputField';
 import renderHTML from 'react-render-html';
-import Linkify from 'react-linkify';
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -26,6 +25,7 @@ import Input from 'material-ui/Input';
 import { notificationEmitter } from '../Component/Notification';
 import * as globalObject from '../Utils/globalObject';
 import TextField from 'material-ui/TextField';
+import TrackPlayerCard from '../Component/TrackPlayerCard';
 
 import '../SCSS/TrackPage.scss';
 
@@ -62,21 +62,21 @@ export default class TrackPage extends React.Component {
     const id = this.props.match.params.id;
     const url = getApiUrl('api', `/track/${id}`);
     const response = await axios.get(url);
-    if(!response.data.error){
+    if (!response.data.error) {
       this.setState({
         track: response.data,
       });
       let user = globalObject.get('user');
-      if(user){
-        if(user.id === response.data.author.id){
+      if (user) {
+        if (user.id === response.data.author.id) {
           this.setState({
             isOwner: true,
           });
         }
-      }else{
+      } else {
         globalObject.emitter.addListener('set', payload => {
-          if(payload.name === 'user'){
-            if(user.id === response.data.author.id){
+          if (payload.name === 'user') {
+            if (user.id === response.data.author.id) {
               this.setState({
                 isOwner: true,
               });
@@ -88,10 +88,10 @@ export default class TrackPage extends React.Component {
     }
   }
 
-  async fetchComments(){
+  async fetchComments() {
     const url = getApiUrl('api', `/track/${this.state.track.id}/comment`);
     const response = await axios.get(url);
-    if(!response.data.error){
+    if (!response.data.error) {
       this.setState({
         comments: response.data,
       });
@@ -107,7 +107,7 @@ export default class TrackPage extends React.Component {
     });
   }
 
-  playTrack(){
+  playTrack() {
     const track = this.state.track;
     player.emitter.emit('play', track);
   }
@@ -120,19 +120,19 @@ export default class TrackPage extends React.Component {
     });
   }
 
-  checkImage(text){
-    const match = text.match(imageRegex) ;
-    if(match){
+  checkImage(text) {
+    const match = text.match(imageRegex);
+    if (match) {
       const googleImageUrl = googleCacheImage(match, null, 3.154e+7)
       text = text.replace(match, `<BR /> <a href="${match}" target="_blank"><img src="${googleImageUrl}" alt="Imgur image" class="commentImage"/></a> <BR />`);
     }
     return text;
   }
 
-  eachComment(){
+  eachComment() {
     const returnArray = [];
     const comments = this.state.comments;
-    if(comments.length <= 0){
+    if (comments.length <= 0) {
       // No comment
       returnArray.push(
         <div>
@@ -143,7 +143,7 @@ export default class TrackPage extends React.Component {
           >The comment session is pretty empty</Typography>
         </div>
       )
-    }else{
+    } else {
       comments.map(comment => {
         return returnArray.push(
           <div key={comment.id}
@@ -168,7 +168,7 @@ export default class TrackPage extends React.Component {
     return returnArray;
   }
 
-  showLongText(){
+  showLongText() {
     this.setState({
       descriptionStyle: {
         display: 'block',
@@ -178,7 +178,7 @@ export default class TrackPage extends React.Component {
     });
   }
 
-  hideLongText(){
+  hideLongText() {
     this.setState({
       descriptionStyle: {
         display: 'none',
@@ -188,10 +188,10 @@ export default class TrackPage extends React.Component {
     });
   }
 
-  toogleDescription(){
-    if(this.state.descriptionOpen){
+  toogleDescription() {
+    if (this.state.descriptionOpen) {
       this.hideLongText();
-    }else{
+    } else {
       this.showLongText();
     }
   }
@@ -199,59 +199,59 @@ export default class TrackPage extends React.Component {
   eachPlaylist(data) {
     return data.map(playlist => {
       return (
-          <ListItem key={playlist.id} dense >
-            <img 
-              src={getApiUrl('api', `/image/playlist/${playlist.id}?width=100`)}
-              alt={`${playlist.title} cover art`}
-              className="coverArt"
-              imageStyle={{
-                width: '3em',
-                height: '3em',
-              }}
-            />
-            <Link to={`/playlist/${playlist.id}`}>
-              <ListItemText primary={playlist.title} />
-            </Link>
-            <ListItemSecondaryAction>
-              <Button onClick={() => this.addToPlaylist({id: playlist.id})}>Add</Button>
-            </ListItemSecondaryAction>
-          </ListItem>
+        <ListItem key={playlist.id} dense >
+          <img
+            src={getApiUrl('api', `/image/playlist/${playlist.id}?width=100`)}
+            alt={`${playlist.title} cover art`}
+            className="coverArt"
+            imageStyle={{
+              width: '3em',
+              height: '3em',
+            }}
+          />
+          <Link to={`/playlist/${playlist.id}`}>
+            <ListItemText primary={playlist.title} />
+          </Link>
+          <ListItemSecondaryAction>
+            <Button onClick={() => this.addToPlaylist({ id: playlist.id })}>Add</Button>
+          </ListItemSecondaryAction>
+        </ListItem>
       )
     })
   }
 
-  async createNewPlaylist(payload){
+  async createNewPlaylist(payload) {
     this.setState({
       playlistIsOpen: false,
     });
     notificationEmitter.emit('push', {
       message: 'Playlist created',
-       button: 'yay',
+      button: 'yay',
     });
     const title = payload.title;
     const id = payload.id;
     const url = getApiUrl('api', '/playlist/create');
     const response = await axios.post(url, {
-        title,
-        tracks: [
-            id,
-        ]
+      title,
+      tracks: [
+        id,
+      ]
     });
     const playlist = response.data;
     // Update the local playlist array
     const playlists = this.state.playlists;
     playlists.push({
-        id: playlist.id,
-        title: playlist.title,
-        author: playlist.author,
-        tracks: playlist.tracks,
+      id: playlist.id,
+      title: playlist.title,
+      author: playlist.author,
+      tracks: playlist.tracks,
     });
     this.setState({
-        playlists,
+      playlists,
     });
   }
 
-  async addToPlaylist(playlist){
+  async addToPlaylist(playlist) {
     this.setState({
       playlistIsOpen: false,
     });
@@ -263,30 +263,30 @@ export default class TrackPage extends React.Component {
     await axios.post(url);
   }
 
-  async fetchUserPlaylist(){
+  async fetchUserPlaylist() {
     const url = getApiUrl('api', '/me/playlists');
     const response = await axios.get(url);
-    if(!response.data.error){
+    if (!response.data.error) {
       this.setState({
         playlists: response.data,
       })
     }
   }
 
-  async updateTrack(){
+  async updateTrack() {
     let title = this.state.trackTitle;
     let description = this.state.trackDescription;
     const track = this.state.track;
 
-    if(!title){
+    if (!title) {
       title = track.title;
-    }else{
+    } else {
       track.title = title;
     }
 
-    if(!description){
+    if (!description) {
       description = track.description;
-    }else{
+    } else {
       track.description = description;
     }
 
@@ -302,17 +302,16 @@ export default class TrackPage extends React.Component {
     form.append('title', title);
     form.append('description', description);
     const config = {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        },
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
     };
     await axios.post(url, form, config);
-    const modal = this.state.modal;
   }
 
   render() {
 
-    if(this.state.playlistIsOpen && this.state.playlistIndex === 0 && typeof this.state.playlists === 'undefined'){
+    if (this.state.playlistIsOpen && this.state.playlistIndex === 0 && typeof this.state.playlists === 'undefined') {
       this.fetchUserPlaylist();
     }
 
@@ -331,77 +330,82 @@ export default class TrackPage extends React.Component {
       // With track data
       return (
         <div key={this.state.track.id} id={this.state.track.id}>
+          {
+            (() => {
+              if (this.state.isOwner) {
+                return (
 
-        {
-          (() => {
-            if(this.state.isOwner){
-              return (
+                  <Dialog
+                    open={this.state.editIsOpen}
+                    transition={Transition}
+                    keepMounted
+                    onClose={() => this.setState({ editIsOpen: false })}
+                    onKeyDown={e => {
+                      if(e.keyCode === 13){
+                        // ENTER
+                        this.updateTrack();
+                      }
+                    }}
+                  >
+                    <DialogTitle>
+                      Editing Your Track
+                    </DialogTitle>
+                    <DialogContent>
 
-                <Dialog
-                  open={this.state.editIsOpen}
-                  transition={Transition}
-                  keepMounted
-                  onClose={() => this.setState({editIsOpen: false})}
-                >
-                  <DialogTitle>
-                    Editing Your Track
-                  </DialogTitle>
-                  <DialogContent>
+                      <TextField
+                        label="Title"
+                        defaultValue={renderHTML(this.state.track.title)}
+                        margin="normal"
+                        style={{
+                          width: '40vw',
+                        }}
+                        onInput={e => this.setState({ trackTitle: e.target.value })}
+                      />
 
-                    <TextField
-                      label="Title"
-                      defaultValue={renderHTML(this.state.track.title)}
-                      margin="normal"
-                      style={{
-                        width: '40vw',
-                      }}
-                      onInput={e => this.setState({trackTitle: e.target.value})}
-                    />
+                      <TextField
+                        label="Description"
+                        multiline
+                        rows="10"
+                        defaultValue={renderHTML(this.state.track.description)}
+                        margin="normal"
+                        style={{
+                          width: '100%',
+                        }}
+                        onInput={e => this.setState({ trackDescription: e.target.value })}
+                      />
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={() => this.setState({ editIsOpen: false })} color="primary">
+                        Cancel
+                      </Button>
+                      <Button onClick={() => this.updateTrack()} color="primary">
+                        Save
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                )
+              }
+            })()
+          }
 
-                    <TextField
-                      label="Description"
-                      multiline
-                      rows="10"
-                      defaultValue={renderHTML(this.state.track.description)}
-                      margin="normal"
-                      style={{
-                        width: '40vw',
-                      }}
-                      onInput={e => this.setState({trackDescription: e.target.value})}
-                    />
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={() => this.setState({editIsOpen: false})} color="primary">
-                      Cancel
-                    </Button>
-                    <Button onClick={() => this.updateTrack()} color="primary">
-                      Save
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-              )
-            }
-          })()
-        }
-
-          <Dialog 
-            onClose={() => this.setState({playlistIsOpen: false})} 
+          <Dialog
+            onClose={() => this.setState({ playlistIsOpen: false })}
             open={this.state.playlistIsOpen}
             transition={Transition}
           >
-            <Tabs value={this.state.playlistIndex} onChange={(e, value) => this.setState({playlistIndex: value})}>
+            <Tabs value={this.state.playlistIndex} onChange={(e, value) => this.setState({ playlistIndex: value })}>
               <Tab label="Add To Playlist" />
               <Tab label="Create New One" />
             </Tabs>
             {
               (() => {
-                if(this.state.playlistIndex === 0){
+                if (this.state.playlistIndex === 0) {
                   // Add existing playlist
                   return (
                     <Typography component="div" style={{ padding: 8 * 3 }}>
                       {
                         (() => {
-                          if(this.state.playlists){
+                          if (this.state.playlists) {
                             return (
                               <List>
                                 {
@@ -409,7 +413,7 @@ export default class TrackPage extends React.Component {
                                 }
                               </List>
                             )
-                          }else{
+                          } else {
                             return <CircularProgress />;
                           }
                         })()
@@ -422,7 +426,7 @@ export default class TrackPage extends React.Component {
 
             {
               (() => {
-                if(this.state.playlistIndex === 1){
+                if (this.state.playlistIndex === 1) {
                   // Add existing playlist
                   return (
                     <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -452,7 +456,7 @@ export default class TrackPage extends React.Component {
                         onPaste={e => this.onPaste(e)}
                       />
                       <br />
-                      <Button onClick={() => this.createNewPlaylist({title: this.state.value, id: this.state.track.id})}>Save</Button>
+                      <Button onClick={() => this.createNewPlaylist({ title: this.state.value, id: this.state.track.id })}>Save</Button>
                     </Typography>
                   )
                 }
@@ -462,55 +466,20 @@ export default class TrackPage extends React.Component {
 
           <div id="track_details">
 
-            <Button
-              id={'coverArt'}
-              onClick={() => this.playTrack()}
-            >
-              <img src={googleCacheImage(getApiUrl('api', `/image/coverart/${this.state.track.id}?width=300`), 300)} alt={`${this.state.track.title} cover art`} 
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                }}
-              />
-            </Button>
-
-            <div className="text"
+            <div
               style={{
-                display: 'inline',
-                position: 'absolute',
-                top: '1em',
-                marginLeft: '1em',
+                display: 'flex',
+                justifyContent: 'center',
               }}
             >
+              <TrackPlayerCard track={this.state.track} />
+            </div>
 
-              <Typography
-                style={{
-                  color: this.state.darkTheme ? '#FFF' : '#161616',
-                }}
-              >
-                {
-                  renderHTML(
-                    this.state.track.title
-                  )
-                }
-              </Typography>
-
-              <Typography
-                style={{
-                  color: this.state.darkTheme ? '#FFF' : '#161616',
-                }}
-              >
-                <Link id="author" to={`/user/${this.state.track.author.username}`}>
-                  @{this.state.track.author.username}
-                </Link>
-              </Typography>
+            <div className="text" >
 
               <Tooltip title={'Playlist'} >
                 <IconButton
-                  onClick={() => this.setState({playlistIsOpen: true})}
+                  onClick={() => this.setState({ playlistIsOpen: true })}
                 >
                   <ListIcon />
                 </IconButton>
@@ -518,11 +487,11 @@ export default class TrackPage extends React.Component {
 
               {
                 (() => {
-                  if(this.state.isOwner){
+                  if (this.state.isOwner) {
                     return (
                       <Tooltip title={'Edit'} >
                         <IconButton
-                          onClick={() => this.setState({editIsOpen: true})}
+                          onClick={() => this.setState({ editIsOpen: true })}
                         >
                           <CreateIcon />
                         </IconButton>
@@ -532,95 +501,30 @@ export default class TrackPage extends React.Component {
                 })()
               }
 
-              <hr
-                style={{
-                  margin: '1em 0em'
-                }}
-               />
 
-              <Linkify>
-                <Typography component="div">
-                  {
-                    (() => {
-                      if(this.state.track.description){
-                        const lineByLine = this.state.track.description.split('\n');
-                        const lines = lineByLine.length;
-                        const previewLines = 3;
-                        if(lines <= previewLines){
-                          return (
-                            <Typography>
-                              {
-                                renderHTML(
-                                  this.state.track.description
-                                )
-                              }
-                            </Typography>
-                          )
-                        }else{
-                          let preview = '';
-                          for(let index = 0; index < previewLines; index++){
-                              preview += lineByLine[index] + ' <BR />';
-                          }
-                          return (
-                            <div id="readmore">
-                              <Typography>
-                                {
-                                  renderHTML(preview)
-                                }
-
-                                <div ref={'longText'} id={'longText'} style={this.state.descriptionStyle}>
-                                  {
-                                    (() => {
-                                        let text = '';
-                                        for(let index = previewLines; index < lines; index++){
-                                            text += `${lineByLine[index]} <BR />`;
-                                        };
-                                        return renderHTML(text);
-                                    })()
-                                  }
-                                </div>
-
-                                <Button
-                                  style={{
-                                    marginTop: '0.5em',
-                                  }}
-                                  onClick={e => this.toogleDescription()}
-                                >
-                                  {
-                                    this.state.descriptionButton
-                                  }
-                                </Button>
-                              </Typography>
-                            </div>
-                          )
-                        }
-                      }
-                    })()
-                  }
-                </Typography>
-              </Linkify>
-
-              {
-                // Comment session
-                (() => {
-                  if(!this.state.comments){
-                    return <CircularProgress />;
-                  }else{
-                    return (
-                      <div style={{
-                        marginTop: '1em',
-                        height: '15em',
-                      }}>
-                        <div id="comments">{this.eachComment()}</div>
-                        <ComentInputField 
-                          id={this.state.track.id}
-                          onChange={data => this.updateCommentList(data)}
-                        />
-                      </div>
-                    )
-                  }
-                })()
-              }
+              <Slide in={true} direction="up" mountOnEnter unmountOnExit>
+                {
+                  // Comment session
+                  (() => {
+                    if (!this.state.comments) {
+                      return <CircularProgress />;
+                    } else {
+                      return (
+                        <div style={{
+                          marginTop: '1em',
+                          height: '15em',
+                        }}>
+                          <div id="comments">{this.eachComment()}</div>
+                          <ComentInputField
+                            id={this.state.track.id}
+                            onChange={data => this.updateCommentList(data)}
+                          />
+                        </div>
+                      )
+                    }
+                  })()
+                }
+              </Slide>
 
             </div>
 

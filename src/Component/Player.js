@@ -18,6 +18,7 @@ import getApiUrl from '../Utils/getApiUrl';
 import * as socketIoAuth from '../Utils/socketIoAuth';
 import { CircularProgress } from 'material-ui/Progress';
 import Emojify from 'react-emojione';
+import renderHTML from 'react-render-html';
 
 import Fade from 'material-ui/transitions/Fade';
 
@@ -283,7 +284,7 @@ export default class Player extends React.Component {
 
       if ('mediaSession' in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
-          title: track.title,
+          title: renderHTML(track.title),
           artist: track.author_fullName,
           artwork: [
             {
@@ -397,7 +398,13 @@ export default class Player extends React.Component {
               }}
               noWrap={true}
               id="title"
-            >{this.state.track.title || ''}</Typography>
+            >
+              {
+                renderHTML(
+                  this.state.track.title || ''
+                )
+              }
+            </Typography>
           </div>
 
           <div id="#track_time_stamp">

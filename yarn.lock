@@ -4792,6 +4792,12 @@ material-ui-icons@^1.0.0-beta.36:
   dependencies:
     recompose "^0.26.0"
 
+material-ui-image@^3.0.0-pre.6:
+  version "3.0.0-pre.6"
+  resolved "https://registry.yarnpkg.com/material-ui-image/-/material-ui-image-3.0.0-pre.6.tgz#cfab33794399fd8d9dfc2c524d28ef4982a56be2"
+  dependencies:
+    prop-types "^15.5.8"
+
 material-ui-upload@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/material-ui-upload/-/material-ui-upload-1.2.1.tgz#c5a082b07620f42564a193e57d94b0e7a3aa89b8"
