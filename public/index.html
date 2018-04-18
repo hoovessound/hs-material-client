@@ -5,16 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="theme-color" content="#000000">
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">    
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <link rel="stylesheet" async href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
   <title>HoovesSound</title>
   </head>
   <body>
+    
+    <style>
+      *{
+        padding: 0em;
+        margin: 0em;
+      }
+    </style>
 
-    <div id="first_paint">
-      <div style="background: #3f51b5; width: 100vw;height: 3em; position: fixed; top: 0em; left: 0em;"></div>
-      <div style="background: rgb(143, 67, 156); width: 100vw;height: 5em; position: fixed; bottom: 0em; left: 0em;"></div>
-      <div style="background: #CCC; width: 5em; height: 5em; position: fixed; bottom: 0em; left: 0em;"></div>
-      <img src="https://storage.googleapis.com/hs-static/favicon.png" alt="HoovesSound Logo" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 5em; height: 5em;background: #CEF0B9; padding: 1em; border-radius: 50%;">
+    <div id="first_paint" style="display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #1D566E;">
+      <div id="text">
+        <h1 style="font-family: Roboto; color: #161616;">HoovesSound</h1>
+        <h4 style="font-family: Roboto; color: #161616; text-align: right; color: #c4c5c6">Streaming Pony Music <br /> Anytime Anywhere</h4>
+      </div>
+      <div id="icon" style="background: #21ABA5 url(https://storage.googleapis.com/hs-static/favicon.png) no-repeat center; width: 10em; height: 10em; border-radius: 50%; background-size: cover; display: block;"></div>
+      
+      <div class="load-bar">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+      
+      <style>
+        .load-bar {
+          position: fixed;
+          width: 100%;
+          height: 6px;
+          background-color: #fdba2c;
+          bottom: 0em;
+        }
+        .bar {
+          content: "";
+          display: inline;
+          position: absolute;
+          width: 0;
+          height: 100%;
+          left: 50%;
+          text-align: center;
+        }
+        .bar:nth-child(1) {
+          background-color: #da4733;
+          animation: loading 3s linear infinite;
+        }
+        .bar:nth-child(2) {
+          background-color: #3b78e7;
+          animation: loading 3s linear 1s infinite;
+        }
+        .bar:nth-child(3) {
+          background-color: #fdba2c;
+          animation: loading 3s linear 2s infinite;
+        }
+        @keyframes loading {
+          from {left: 50%; width: 0;z-index:100;}
+          33.3333% {left: 0; width: 100%;z-index: 10;}
+          to {left: 0; width: 100%;}
+        }
+      </style>
+      
     </div>
 
     <noscript>

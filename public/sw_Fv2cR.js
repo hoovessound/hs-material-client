@@ -27,6 +27,9 @@ const preCacheList = [
 
   // Emoji one sheet
   'https://github.com/pladaria/react-emojione/blob/emojione3/assets/sprites/emojione-3.1.2-64x64.png?raw=true',
+
+  // Material UI defalut font
+  'https://fonts.googleapis.com/css?family=Roboto:300,400,500',
 ];
 
 self.addEventListener('install', event => {
