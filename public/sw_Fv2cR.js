@@ -46,7 +46,6 @@ self.addEventListener('install', event => {
 self.addEventListener('fetch', event => {
   // When the browser trys to fetch something like making an API call or getting an image from Imgur, this event kicks in
 
-
   // Socket.io stuff
   if(event.request.url.includes('socket.io')){
     return fetch(event.request);
@@ -73,7 +72,29 @@ self.addEventListener('fetch', event => {
     return fetch(event.request);
   }
 
+  // Cache first
+
   if(event.request.url.includes('hoovessound') && event.request.url.includes('/image/')){
+    // HoovesSound Image API
+    // Serive cache version first
+    caches.open(_cacheName).then((cache) => {
+      return cache.match(event.request).then((response) => {
+        if (response) {
+          fetch(event.request).then((response) => {
+            cache.put(event.request, response.clone());
+          });
+          return response;
+        }else{
+          return fetch(event.request).then((response) => {
+            cache.put(event.request, response.clone());
+            return response;
+          });
+        }
+      })
+    });
+  }
+
+  if(event.request.url.includes('fonts.googleapis.com')){
     // HoovesSound Image API
     // Serive cache version first
     caches.open(_cacheName).then((cache) => {
