@@ -7,23 +7,24 @@ import { emitter } from '../Component/NavBar';
 import { notificationEmitter } from '../Component/Notification';
 import { EventEmitter } from 'fbemitter';
 
-const SettingsEmmiter = new EventEmitter();
+export const SettingsEmitter = new EventEmitter();
 
 export default class Settings extends React.Component {
 
   constructor(){
     super();
-    this.emitter = SettingsEmmiter;
+    this.emitter = SettingsEmitter;
   }
 
   state = {
     darkTheme: isDarkTheme(),
     sync: localStorage.getItem('hs_sync') === 'true' ? true : false,
     fadeOut: localStorage.getItem('hs_fadeout') === 'true' ? true : false,
+    disableAnimation: localStorage.getItem('hs_disable_animation') === 'true' ? true : false,
   }
 
   async componentDidMount(){
-    this.emitter = SettingsEmmiter;
+    this.emitter = SettingsEmitter;
     emitter.addListener('change', darkTheme => {
       this.setState({
         darkTheme,
@@ -38,7 +39,7 @@ export default class Settings extends React.Component {
     });
     localStorage.setItem('hs_sync', !sync);
     this.notify();
-    SettingsEmmiter.emit('setting.sync', !sync);
+    SettingsEmitter.emit('setting.sync', !sync);
   }
 
   handelfadeOut(){
@@ -48,7 +49,17 @@ export default class Settings extends React.Component {
     });
     localStorage.setItem('hs_sync', !fadeOut);
     this.notify();
-    SettingsEmmiter.emit('setting.fadeOut', !fadeOut);
+    SettingsEmitter.emit('setting.fadeOut', !fadeOut);
+  }
+
+  handleDisableAnimation(){
+    let disableAnimation = this.state.disableAnimation;
+    this.setState({
+      disableAnimation: !disableAnimation,
+    });
+    localStorage.setItem('hs_disable_animation', !disableAnimation);
+    this.notify();
+    SettingsEmitter.emit('setting.disableAnimation', !disableAnimation);
   }
 
   notify(){
@@ -106,9 +117,22 @@ export default class Settings extends React.Component {
           When you pause the track, it will fade out instead of killing immediately
         </Typography>
 
-        <Button variant="raised" color="secondary">
-          Delete Account
-        </Button>
+        <Typography
+          style={{
+            color: this.state.darkTheme ? '#FFF' : '#161616',
+          }}
+        >
+          Disable Animatinos
+          <Switch
+            value="checkedB"
+            color="primary"
+            checked={this.state.disableAnimation}
+            onChange={() => this.handleDisableAnimation()}
+          />
+          <br />
+          When you are using a low-end device, and you want to have a much smoother experience, disabling all fancy animations will make your device run much faster
+        </Typography>
+
       </div>
     )
   }
