@@ -9,7 +9,7 @@ import Switch from "material-ui/Switch";
 import IconButton from "material-ui/IconButton";
 import Menu, { MenuItem } from "material-ui/Menu";
 import Avatar from "material-ui/Avatar";
-import Drawer from 'material-ui/Drawer';
+import SwipeableDrawer from 'material-ui/SwipeableDrawer';
 import Button from 'material-ui/Button';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Tooltip from 'material-ui/Tooltip';
@@ -22,6 +22,7 @@ import isDarkTheme from '../Utils/isDarkTheme';
 import { EventEmitter } from 'fbemitter';
 import googleCacheImage from '../Utils/googleCacheImage';
 import * as globalObject from '../Utils/globalObject';
+import { SettingsEmitter } from '../Pages/Setting';
 
 // Icons
 import ListIcon from 'material-ui-icons/List';
@@ -33,6 +34,8 @@ import CloudUpload from "material-ui-icons/CloudUpload";
 import getApiUrl from "../Utils/getApiUrl";
 
 export const emitter = new EventEmitter();
+
+const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
 const styles = {
   root: {
@@ -57,6 +60,7 @@ class MenuAppBar extends React.Component {
       username: '',
     },
     randomKey: 0,
+    navBarBackgroundTransition: localStorage.getItem('hs_disable_animation') === 'true' ? true : false,
   };
   
 
@@ -79,6 +83,7 @@ class MenuAppBar extends React.Component {
     if(cookie.load('jwt_token')){
       this.fetchUserInfo();    
     }
+    SettingsEmitter.addListener('setting.disableAnimation', navBarBackgroundTransition => this.setState({navBarBackgroundTransition}));
   }
 
   handleMenu = event => {
@@ -138,7 +143,7 @@ class MenuAppBar extends React.Component {
               className={classes.flex}
             >
               <Link to={'/'}>
-                HoovesSound(BETA)
+                HoovesSound
               </Link>
             </Typography>
 
@@ -240,7 +245,14 @@ class MenuAppBar extends React.Component {
           </Toolbar>
         </AppBar>
 
-        <Drawer anchor="left" open={this.state.drawer} onClose={this.toogleDrawer.bind(this)}>
+        <SwipeableDrawer 
+          anchor="left" 
+          open={this.state.drawer}
+          onClose={this.toogleDrawer.bind(this)}
+          onOpen={this.toogleDrawer.bind(this)}
+          disableDiscovery={iOS}
+          disableBackdropTransition={this.state.navBarBackgroundTransition}
+        >
           <div
             tabIndex={0}
             role="button"
@@ -309,19 +321,9 @@ class MenuAppBar extends React.Component {
               </a>
               </Tooltip>
             </ListItem>
-            
-
-            <ListItem>
-              <Typography>
-                Thank you for <br /> 
-                trying out the <br /> 
-                new HoovesSound BETA
-              </Typography>
-            </ListItem>
-
           </List>
           </div>
-        </Drawer>
+        </SwipeableDrawer>
       </div>
     );
   }
