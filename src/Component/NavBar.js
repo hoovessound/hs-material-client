@@ -142,7 +142,7 @@ class MenuAppBar extends React.Component {
               color="inherit"
               className={classes.flex}
             >
-              <Link to={'/'}>
+              <Link to={'/'} style={{cursor: 'default'}}>
                 HoovesSound
               </Link>
             </Typography>
