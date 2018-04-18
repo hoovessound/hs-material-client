@@ -30,16 +30,6 @@ import PageViewIcon from 'material-ui-icons/Pageview';
 
 import Slide from 'material-ui/transitions/Slide';
 
-window.onclick = e => {
-    if(e.target.tagName === 'A' || e.target.tagName === 'a'){
-        e.preventDefault();
-        window.open(
-            getApiUrl('redirect', `/?redirect=${e.target.href}&from=${window.location}`, false),
-            '_blank'
-        )
-    }
-}
-
 function Transition(props) {
     return <Slide direction="up" {...props} />;
 }
@@ -250,7 +240,17 @@ class RecipeReviewCard extends React.Component {
                                     return (
                                         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
                                             <CardContent>
-                                                <Typography paragraph>
+                                                <Typography paragraph
+                                                    onClick={e => {
+                                                        if(e.target.tagName === 'A' || e.target.tagName === 'a'){
+                                                            e.preventDefault();
+                                                            window.open(
+                                                                getApiUrl('redirect', `/?redirect=${e.target.href}&from=${window.location}`, false),
+                                                                '_blank'
+                                                            )
+                                                        }
+                                                    }}
+                                                >
                                                     <Linkify
                                                         properties={
                                                             {
