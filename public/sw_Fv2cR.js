@@ -72,9 +72,13 @@ self.addEventListener('fetch', event => {
     return fetch(event.request);
   }
 
+  if(event.request.url.includes('hot-update')){
+    return fetch(event.request);
+  }
+
   // Cache first
 
-  if(event.request.url.includes('hoovessound') && event.request.url.includes('/image/')){
+  if(event.request.url.includes('api.hoovessound') && event.request.url.includes('/image/')){
     // HoovesSound Image API
     // Serive cache version first
     caches.open(_cacheName).then((cache) => {
@@ -96,7 +100,7 @@ self.addEventListener('fetch', event => {
 
   if(event.request.url.includes('fonts.googleapis.com')){
     // HoovesSound Image API
-    // Serive cache version first
+    // Serve cache version first
     caches.open(_cacheName).then((cache) => {
       return cache.match(event.request).then((response) => {
         if (response) {
@@ -112,6 +116,28 @@ self.addEventListener('fetch', event => {
         }
       })
     });
+  }
+
+  if(event.request.url.includes('stream.hoovessound')){
+    // HoovesSound Music Streaming API
+    // Serve the cache version first
+    caches.open(_cacheName)
+    .then(cache => {
+      return cache.match(event.request)
+      .then(response => {
+        if (response) {
+          fetch(event.request).then((response) => {
+            cache.put(event.request, response.clone());
+          });
+          return response;
+        }else{
+          return fetch(event.request).then((response) => {
+            cache.put(event.request, response.clone());
+            return response;
+          });
+        }
+      })
+    })
   }
 
   // Network first caching method
