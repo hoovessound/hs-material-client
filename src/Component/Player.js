@@ -71,6 +71,7 @@ export default class Player extends React.Component {
           audio.pause();
           audio.volume = initVolume;
           clearInterval(fadeOutInterval);
+          navigator.mediaSession.playbackState = 'paused';
         }
     }, 30);
   }
@@ -144,7 +145,7 @@ export default class Player extends React.Component {
       if(currentId !== track.track.id){
         // New track
         currentId = track.track.id;
-        audio.src = `https://stream.hoovessound.ml/${track.track.id}`;
+        audio.src = getApiUrl('stream', `/${track.track.id}`);
         this.setState({
           track: track.track,
         })
@@ -245,11 +246,13 @@ export default class Player extends React.Component {
   playlistNextTrack(){
     playlistIndex = (playlistIndex + 1);
     this.playMusic(this.state.playlistTracks[playlistIndex]);
+    navigator.mediaSession.playbackState = 'playing';
   }
 
   playlistPreviousTrack(){
     playlistIndex = (playlistIndex - 1);
     this.playMusic(this.state.playlistTracks[playlistIndex]);
+    navigator.mediaSession.playbackState = 'playing';
   }
 
   async playMusic(track, sync=false) {
@@ -342,11 +345,13 @@ export default class Player extends React.Component {
 
     if (audio.paused) {
       await audio.play();
+      navigator.mediaSession.playbackState = 'playing';
     } else {
       if(this.state.fadeOut){
         this.fadeOut();
       }else{
         await audio.pause();
+        navigator.mediaSession.playbackState = 'paused';
       }
     }
   }
