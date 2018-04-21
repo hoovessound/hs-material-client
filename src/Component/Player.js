@@ -68,10 +68,10 @@ export default class Player extends React.Component {
         if(actualVolume >= 0){
           audio.volume = actualVolume;
         } else {
+          navigator.mediaSession.playbackState = 'paused';
           audio.pause();
           audio.volume = initVolume;
           clearInterval(fadeOutInterval);
-          navigator.mediaSession.playbackState = 'paused';
         }
     }, 30);
   }
@@ -344,14 +344,14 @@ export default class Player extends React.Component {
     }
 
     if (audio.paused) {
-      await audio.play();
       navigator.mediaSession.playbackState = 'playing';
+      await audio.play();
     } else {
       if(this.state.fadeOut){
         this.fadeOut();
       }else{
-        await audio.pause();
         navigator.mediaSession.playbackState = 'paused';
+        await audio.pause();
       }
     }
   }
