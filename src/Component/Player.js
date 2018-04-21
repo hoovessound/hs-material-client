@@ -246,13 +246,17 @@ export default class Player extends React.Component {
   playlistNextTrack(){
     playlistIndex = (playlistIndex + 1);
     this.playMusic(this.state.playlistTracks[playlistIndex]);
-    navigator.mediaSession.playbackState = 'playing';
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.playbackState = 'playing';
+    }
   }
 
   playlistPreviousTrack(){
     playlistIndex = (playlistIndex - 1);
     this.playMusic(this.state.playlistTracks[playlistIndex]);
-    navigator.mediaSession.playbackState = 'playing';
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.playbackState = 'playing';
+    }
   }
 
   async playMusic(track, sync=false) {
@@ -344,13 +348,17 @@ export default class Player extends React.Component {
     }
 
     if (audio.paused) {
-      navigator.mediaSession.playbackState = 'playing';
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.playbackState = 'playing';
+      }
       await audio.play();
     } else {
       if(this.state.fadeOut){
         this.fadeOut();
       }else{
-        navigator.mediaSession.playbackState = 'paused';
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.playbackState = 'paused';
+        }
         await audio.pause();
       }
     }
