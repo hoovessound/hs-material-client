@@ -247,7 +247,10 @@ export default class Player extends React.Component {
 
   playlistNextTrack(){
     playlistIndex = (playlistIndex + 1);
-    this.playMusic(this.state.playlistTracks[playlistIndex]);
+    const track = this.state.playlistTracks[playlistIndex];
+    this.setState({
+      track,
+    }, () => this.playMusic(track));
     if ('mediaSession' in navigator) {
       navigator.mediaSession.playbackState = 'playing';
     }
@@ -255,7 +258,10 @@ export default class Player extends React.Component {
 
   playlistPreviousTrack(){
     playlistIndex = (playlistIndex - 1);
-    this.playMusic(this.state.playlistTracks[playlistIndex]);
+    const track = this.state.playlistTracks[playlistIndex];
+    this.setState({
+      track,
+    }, () => this.playMusic(track));
     if ('mediaSession' in navigator) {
       navigator.mediaSession.playbackState = 'playing';
     }
