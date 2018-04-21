@@ -29,8 +29,8 @@ export default class Upload extends React.Component {
             local: upload from the user's computer
             youtube: import the track from YouTube
         */
-        source: 'local',
-        selectionOpen: false,
+        source: 'lol',
+        selectionOpen: true,
         uploadFade: true,
         gotPhoto: false,
         progressBarValue: 0,
