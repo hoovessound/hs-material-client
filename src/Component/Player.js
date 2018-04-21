@@ -68,7 +68,9 @@ export default class Player extends React.Component {
         if(actualVolume >= 0){
           audio.volume = actualVolume;
         } else {
-          navigator.mediaSession.playbackState = 'paused';
+          if ('mediaSession' in navigator) {
+            navigator.mediaSession.playbackState = 'paused';
+          }
           audio.pause();
           audio.volume = initVolume;
           clearInterval(fadeOutInterval);
