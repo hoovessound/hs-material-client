@@ -2,6 +2,8 @@ import React from 'react';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import { notificationEmitter } from '../Component/Notification';
 import Emojify from 'react-emojione';
+import getApiUrl from '../Utils/getApiUrl';
+import axios from 'axios';
 
 class SimpleMenu extends React.Component {
   state = {
@@ -24,12 +26,26 @@ class SimpleMenu extends React.Component {
     this.handleClose();
   }
 
-  favorite(){
+  async favoriteThisTrack() {
     notificationEmitter.emit('push', {
       message: `Thank you for the :heart:`,
     });
     this.handleClose();
-  }
+    this.setState({
+        isFavorite: !this.state.isFavorite,
+    });
+    const url = getApiUrl('api', `/track/${this.props.track.id}/favorite`);
+    const response = await axios.post(url);
+    if(response.data.error){
+      this.setState({
+          isFavorite: !this.state.isFavorite,
+      });
+      notificationEmitter.emit('push', {
+        message: 'Oh crap, something when wrong, plz try that again',
+        button: ':face_palm:',
+      });
+    }
+}
 
   render() {
     const { anchorEl } = this.state;
@@ -42,7 +58,7 @@ class SimpleMenu extends React.Component {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          <MenuItem onClick={this.favorite.bind(this)}>
+          <MenuItem onClick={this.favoriteThisTrack.bind(this)}>
             <Emojify style={{height: 17, width: 17}}>
               :heart:
             </Emojify>

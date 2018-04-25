@@ -23,6 +23,7 @@ import Image from 'material-ui-image';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import { notificationEmitter } from './Notification';
 import Chip from 'material-ui/Chip';
+import axios from 'axios';
 
 import FavoriteIcon from 'material-ui-icons/Favorite';
 import PlayArrowIcon from 'material-ui-icons/PlayArrow';
@@ -121,18 +122,43 @@ class RecipeReviewCard extends React.Component {
         expanded: false,
         viewImage: false,
         loadBigImage: false,
+        isFavorite: false,
     };
 
     handleExpandClick = () => {
         this.setState({ expanded: !this.state.expanded });
     };
 
-    componentDidMount() {
+    async componentDidMount() {
         const { track } = this.props;
         // Injecting some default tags
         track.tags.push(
             `artist:${track.author.username}`,
         );
+        const url = getApiUrl('api', `/track/${track.id}/is_favorite`);
+        const response = await axios.get(url);
+        if(!response.data.error){
+            this.setState({
+                isFavorite: response.data.is_favorite,
+            });
+        }
+    }
+
+    async favoriteThisTrack() {
+        this.setState({
+            isFavorite: !this.state.isFavorite,
+        });
+        const url = getApiUrl('api', `/track/${this.props.track.id}/favorite`);
+        const response = await axios.post(url);
+        if(response.data.error){
+            this.setState({
+                isFavorite: !this.state.isFavorite,
+            });
+            notificationEmitter.emit('push', {
+                message: 'Oh crap, something when wrong, plz try that again',
+                button: ':face_palm:',
+            });
+        }
     }
 
     render() {
@@ -199,14 +225,23 @@ class RecipeReviewCard extends React.Component {
 
                     <CardActions className={classes.actions} disableActionSpacing>
                         <IconButton aria-label="Add to favorites"
-                            onClick={() => {
-                                notificationEmitter.emit('push', {
-                                    message: ':heart: the feature will be soon implemented :tada:',
-                                    button: ':stuck_out_tongue_closed_eyes:',
-                                })
-                            }}
+                            onClick={() => this.favoriteThisTrack()}
                         >
-                            <FavoriteIcon />
+                            {
+                                (() => {
+                                    if(this.state.isFavorite){
+                                        return (
+                                            <FavoriteIcon style={{
+                                                color: 'red',
+                                            }} />
+                                        )
+                                    }else{
+                                        return (
+                                            <FavoriteIcon />
+                                        )
+                                    }
+                                })()
+                            }
                         </IconButton>
                         <IconButton aria-label="Play/pause" onClick={() => playerEmitter.emit('play', track)}>
                             <PlayArrowIcon />
