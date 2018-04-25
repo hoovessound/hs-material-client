@@ -24,7 +24,7 @@ export default class Login extends React.Component {
           textAlign: 'center',
         }}>
           <CircularProgress />
-          <Typography>Please wait</Typography>
+          <Typography>Redirecting You</Typography>
         </div>
     )
   }
