@@ -290,7 +290,7 @@ export default class TrackPage extends React.Component {
       track.description = description;
     }
 
-    const url = getApiUrl('api', `/track/edit/${this.state.track.id}`);
+    const url = getApiUrl('api', `/track/${this.state.track.id}/edit`);
     this.setState({
       track,
       editIsOpen: false,
