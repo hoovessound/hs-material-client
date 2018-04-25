@@ -1,7 +1,6 @@
 import cookies from 'react-cookies';
 export default (subdomain = 'api', path = '/', needAuth = true) => {
     let tail = "";
-    let isTls = false;
 
     if (!subdomain.endsWith('.')) {
         subdomain += '.';
@@ -18,15 +17,6 @@ export default (subdomain = 'api', path = '/', needAuth = true) => {
       }else{
         tail += `?jwt=${token}&bypass=true`;
       }
-    }
-
-    if(window.location.href.startsWith('https://')){
-      // TLS
-      isTls = true;
-    }
-
-    if(isTls){
-      return (`https://${subdomain}hoovessound.ml${path}${tail}`);
     }
 
     if(process.env.NODE_ENV === 'production'){
