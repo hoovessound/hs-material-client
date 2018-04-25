@@ -22,6 +22,7 @@ import Dialog, {
 import Image from 'material-ui-image';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import { notificationEmitter } from './Notification';
+import Chip from 'material-ui/Chip';
 
 import FavoriteIcon from 'material-ui-icons/Favorite';
 import PlayArrowIcon from 'material-ui-icons/PlayArrow';
@@ -126,6 +127,14 @@ class RecipeReviewCard extends React.Component {
         this.setState({ expanded: !this.state.expanded });
     };
 
+    componentDidMount() {
+        const { track } = this.props;
+        // Injecting some default tags
+        track.tags.push(
+            `artist:${track.author.username}`,
+        );
+    }
+
     render() {
         const { classes, track } = this.props;
 
@@ -212,40 +221,66 @@ class RecipeReviewCard extends React.Component {
                         }}>
                             <PageViewIcon />
                         </IconButton>
-                        {
-                            (() => {
-                                if (track.description !== null) {
-                                    if (track.description.length >= 1) {
-                                        return (
-                                            <IconButton
-                                                className={classnames(classes.expand, {
-                                                    [classes.expandOpen]: this.state.expanded,
-                                                })}
-                                                onClick={this.handleExpandClick}
-                                                aria-expanded={this.state.expanded}
-                                                aria-label="Show more"
-                                            >
-                                                <ExpandMoreIcon />
-                                            </IconButton>
-                                        )
-                                    }
-                                }
-                            })()
-                        }
+                        
+                        <IconButton
+                            className={classnames(classes.expand, {
+                                [classes.expandOpen]: this.state.expanded,
+                            })}
+                            onClick={this.handleExpandClick}
+                            aria-expanded={this.state.expanded}
+                            aria-label="Show more"
+                        >
+                            <ExpandMoreIcon />
+                        </IconButton>
+
                     </CardActions>
-                    {
-                        (() => {
-                            if (track.description !== null) {
-                                if (track.description.length >= 1) {
-                                    return (
-                                        <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-                                            <CardContent>
+
+                    <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+                        <CardContent>
+
+                            {
+                                // Showing the track's tags
+                                (() => {
+                                    const tags = [];
+                                    track.tags.map(tag => {
+                                        if(tag === `artist:${track.author.username}`){
+                                            return tags.push(
+                                                <Link
+                                                    to={`/@${track.author.username}`}
+                                                >
+                                                    <Chip
+                                                        label={tag}
+                                                    />
+                                                </Link>
+                                            );
+                                        }else{
+                                            return tags.push(
+                                                <Link
+                                                    to={`/tag/${tag}`}
+                                                >
+                                                    <Chip
+                                                        label={tag}
+                                                    />
+                                                </Link>
+                                            );
+                                        }
+                                    });
+                                    return tags;
+                                })()
+                            }
+
+                            {
+                                // Showing the track description if is not null and the length is bigger then 1 line
+                                (() => {
+                                    if(track.description !== null){
+                                        if(track.description.length >= 1){
+                                            return (
                                                 <Typography paragraph
                                                     onClick={e => {
                                                         if(e.target.tagName === 'A' || e.target.tagName === 'a'){
                                                             e.preventDefault();
                                                             window.open(
-                                                                getApiUrl('redirect', `/?redirect=${e.target.href}&from=${window.location}`, false),
+                                                                getApiUrl('redirect', `/?redirect=${e.target.href}&target=track_description`, false),
                                                                 '_blank'
                                                             )
                                                         }
@@ -264,14 +299,15 @@ class RecipeReviewCard extends React.Component {
                                                             )
                                                         }
                                                     </Linkify>
+                                                    
                                                 </Typography>
-                                            </CardContent>
-                                        </Collapse>
-                                    )
-                                }
+                                            )
+                                        }
+                                    }
+                                })()
                             }
-                        })()
-                    }
+                        </CardContent>
+                    </Collapse>
                 </Card>
             </div>
         );
