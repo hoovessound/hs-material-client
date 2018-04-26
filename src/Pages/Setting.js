@@ -16,6 +16,8 @@ import Dialog, {
 } from 'material-ui/Dialog';
 
 import Slide from 'material-ui/transitions/Slide';
+import getApiUrl from '../Utils/getApiUrl'
+import axios from 'axios'
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -36,6 +38,7 @@ export default class Settings extends React.Component {
     sync: localStorage.getItem('hs_sync') === 'true' ? true : false,
     fadeOut: localStorage.getItem('hs_fadeout') === 'true' ? true : false,
     disableAnimation: localStorage.getItem('hs_disable_animation') === 'true' ? true : false,
+    notification: localStorage.getItem('hs_push_notification') === 'true' ? true : false,
 
     explan: {
       open: false,
@@ -99,6 +102,56 @@ export default class Settings extends React.Component {
     });
   }
 
+  async enablePushNotification(){
+    this.setState({
+      notification: true,
+    });
+    notificationEmitter.emit('push', {
+      message: 'Enabling Push Notification',
+    });
+    if(!this.state.notification){
+      localStorage.setItem('hs_push_notification', true);
+      // Enable
+      window.firebase.initializeApp({
+        apiKey: "AIzaSyBvUKoRvDtyPySBB8_VcPVkZmXj4H5o3Xw",
+        authDomain: "hoovessound-173007.firebaseapp.com",
+        databaseURL: "https://hoovessound-173007.firebaseio.com",
+        projectId: "hoovessound-173007",
+        storageBucket: "",
+        messagingSenderId: "88605347442"
+      });
+      try{
+
+        const messaging = window.firebase.messaging();
+        await  messaging.requestPermission();
+        const token = await messaging.getToken();
+        const url = getApiUrl('notification', `/enable`);
+        await axios.post(url, {
+          token,
+        });
+      }
+      catch(error){
+        console.error(error);
+        notificationEmitter.emit('push', {
+          message: 'You had denied the push notification permission, we will never have a change to get in touch with you ever again :crying_cat_face:',
+          button: ':cry:',
+          duration: 10000,
+        });
+      }
+    }else{
+      this.setState({
+        notification: false,
+      });
+      notificationEmitter.emit('push', {
+        message: 'Disabling Push Notification',
+      });
+      // Disable
+      localStorage.setItem('hs_push_notification', false);
+      const url = getApiUrl('notification', `/disable`);
+      await axios.delete(url);
+    }
+  }
+
   render(){
 
     return (
@@ -131,12 +184,8 @@ export default class Settings extends React.Component {
           <Switch
             value="checkedB"
             color="primary"
-            onChange={e => {
-              notificationEmitter.emit('push', {
-                message: 'Push Notification Will Be Soon Implemented :grimacing:',
-                button: 'YAY :tada: ',
-              });
-            }}
+            onChange={() => this.enablePushNotification()}
+            checked={this.state.notification}
           />
 
           <IconButton
