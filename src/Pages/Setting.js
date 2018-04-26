@@ -112,14 +112,16 @@ export default class Settings extends React.Component {
     if(!this.state.notification){
       localStorage.setItem('hs_push_notification', true);
       // Enable
-      window.firebase.initializeApp({
-        apiKey: "AIzaSyBvUKoRvDtyPySBB8_VcPVkZmXj4H5o3Xw",
-        authDomain: "hoovessound-173007.firebaseapp.com",
-        databaseURL: "https://hoovessound-173007.firebaseio.com",
-        projectId: "hoovessound-173007",
-        storageBucket: "",
-        messagingSenderId: "88605347442"
-      });
+      if(!window.firebase.apps.length){
+        window.firebase.initializeApp({
+          apiKey: "AIzaSyBvUKoRvDtyPySBB8_VcPVkZmXj4H5o3Xw",
+          authDomain: "hoovessound-173007.firebaseapp.com",
+          databaseURL: "https://hoovessound-173007.firebaseio.com",
+          projectId: "hoovessound-173007",
+          storageBucket: "",
+          messagingSenderId: "88605347442"
+        });
+      }
       try{
 
         const messaging = window.firebase.messaging();
