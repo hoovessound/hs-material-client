@@ -56,7 +56,7 @@ export default class Notification extends React.Component {
           horizontal: 'left',
         }}
         open={this.state.snackbar}
-        autoHideDuration={6000}
+        autoHideDuration={this.state.duration || 6000}
         onClose={this.close.bind(this)}
         SnackbarContentProps={{
           'aria-describedby': 'message-id',
