@@ -30,6 +30,9 @@ const preCacheList = [
 
   // Material UI defalut font
   'https://fonts.googleapis.com/css?family=Roboto:300,400,500',
+
+  // Firebase 4.13.0 SDK
+  'https://www.gstatic.com/firebasejs/4.13.0/firebase.js',
 ];
 
 self.addEventListener('install', event => {
