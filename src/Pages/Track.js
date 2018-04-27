@@ -146,15 +146,19 @@ export default class TrackPage extends React.Component {
     } else {
       comments.map(comment => {
         return returnArray.push(
-          <div key={comment.id}
-            style={{
-              color: this.state.darkTheme ? '#FFF' : '#161616',
-            }}
-          >
+          <div key={comment.id}>
             <Link to={`/@${comment.author.username}`}>
-              <Typography>@{comment.author.username}</Typography>
+              <Typography
+                style={{
+                  color: this.state.darkTheme ? '#FFF' : '#161616',
+                }}
+              >@{comment.author.username}</Typography>
             </Link>
-            <Typography>
+            <Typography
+              style={{
+                color: this.state.darkTheme ? '#FFF' : '#161616',
+              }}
+            >
               {
                 renderHTML(
                   this.checkImage(comment.comment)
@@ -480,6 +484,9 @@ export default class TrackPage extends React.Component {
               <Tooltip title={'Playlist'} >
                 <IconButton
                   onClick={() => this.setState({ playlistIsOpen: true })}
+                  style={{
+                    color: this.state.darkTheme ? '#FFF' : '#161616',
+                  }}
                 >
                   <ListIcon />
                 </IconButton>
@@ -492,6 +499,9 @@ export default class TrackPage extends React.Component {
                       <Tooltip title={'Edit'} >
                         <IconButton
                           onClick={() => this.setState({ editIsOpen: true })}
+                          style={{
+                            color: this.state.darkTheme ? '#FFF' : '#161616',
+                          }}
                         >
                           <CreateIcon />
                         </IconButton>

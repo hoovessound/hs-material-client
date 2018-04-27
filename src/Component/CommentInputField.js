@@ -30,9 +30,9 @@ class TextFieldMargins extends React.Component {
   }
 
   componentDidMount() {
-    emitter.addListener('change', darkTheem => {
+    emitter.addListener('change', darkTheme => {
       this.setState({
-        darkTheem,
+        darkTheme,
       });
     });
   }
@@ -116,6 +116,9 @@ class TextFieldMargins extends React.Component {
     return (
       <div>
         <Input
+          style={{
+            color: this.state.darkTheme ? '#FFF' : '#161616',
+          }}
           placeholder="Your Comment"
           className={classes.textField}
           ref="inputField"
@@ -144,6 +147,9 @@ class TextFieldMargins extends React.Component {
           <IconButton
             onClick={e => {
               this.refs.file.click();
+            }}
+            style={{
+              color: this.state.darkTheme ? '#FFF' : '#161616',
             }}
           >
             <InsertPhoto></InsertPhoto>

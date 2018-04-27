@@ -23,6 +23,7 @@ import { EventEmitter } from 'fbemitter';
 import googleCacheImage from '../Utils/googleCacheImage';
 import * as globalObject from '../Utils/globalObject';
 import { SettingsEmitter } from '../Pages/Setting';
+import Emojify from 'react-emojione';
 
 // Icons
 import ListIcon from 'material-ui-icons/List';
@@ -313,7 +314,7 @@ class MenuAppBar extends React.Component {
             </Tooltip>
   
             <ListItem>
-              <Tooltip title="Thanks ;)">
+              <Tooltip title={<Emojify style={{width: 17, height: 17, marginTop: 4}}> Thanks :wink:  </Emojify>}>
               <a href="https://goo.gl/forms/AcMPhirAZ9kwcwG33" target="_blank" rel="noopener noreferrer">
                 <Button>
                   HoovesSound Survey
