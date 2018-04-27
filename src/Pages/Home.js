@@ -121,7 +121,13 @@ export default class HomePage extends React.Component {
                                         }}
                                     >
                                         <CircularProgress/>
-                                        <Typography>Loading more tracks</Typography>
+                                        <Typography
+                                            style={{
+                                                color: this.state.darkTheme ? '#FFF' : '#161616',
+                                            }}
+                                        >
+                                            Loading more tracks
+                                        </Typography>
                                     </div>
                                 }
                         >

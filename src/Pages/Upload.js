@@ -10,6 +10,8 @@ import Input from 'material-ui/Input';
 import axios from 'axios';
 import getApiUrl from '../Utils/getApiUrl';
 import { Redirect } from 'react-router-dom';
+import isDarkTheme from '../Utils/isDarkTheme';
+import { emitter } from '../Component/NavBar';
 
 import ArrowBack from 'material-ui-icons/ArrowBack';
 import MusicNote from 'material-ui-icons/MusicNote';
@@ -38,6 +40,11 @@ export default class Upload extends React.Component {
         youtubeButtonText: 'Upload',
         arrowText: 'Upload A Track',
         uploadButtonDisabled: false,
+        darkTheme: isDarkTheme(),
+    }
+
+    componentDidMount(){
+        emitter.addListener('change', darkTheme => this.setState({darkTheme}));
     }
 
     handelMenuClick(option){
@@ -174,6 +181,21 @@ export default class Upload extends React.Component {
                         <ListItem button onClick={() => this.handelMenuClick('youtube')}>
                             <ListItemText>YouTube</ListItemText>
                         </ListItem>
+
+                        {
+                            (() => {
+                                if(this.state.source === 'lol'){
+                                    return (
+                                        <ListItem button onClick={() => {
+                                            // Cancel
+                                            this.props.history.goBack();
+                                        }}>
+                                            <ListItemText>Cancel</ListItemText>
+                                        </ListItem>
+                                    )
+                                }
+                            })()
+                        }
                     </List>
                 </Dialog>
 
@@ -213,7 +235,13 @@ export default class Upload extends React.Component {
                                                         id={'arrows'}
                                                         ref={'audioFileContainer'}
                                                     >
-                                                        <Typography>{this.state.arrowText}</Typography>
+                                                        <Typography
+                                                            style={{
+                                                                color: this.state.darkTheme ? '#FFF' : '#161616',
+                                                            }}
+                                                        >
+                                                            {this.state.arrowText}
+                                                        </Typography>
                                                         <ArrowDownward id="arrow1"/>
                                                         <ArrowDownward id="arrow2"/>
                                                         <ArrowDownward id="arrow3"/>
@@ -229,6 +257,7 @@ export default class Upload extends React.Component {
                                                 style={{
                                                     cursor: 'pointer',
                                                     padding: '5em 10em',
+                                                    color: this.state.darkTheme ? '#FFF' : '#161616',
                                                 }}
                                                 containerElement='label'
                                                 label='Upload an audio track from your local computer'>
@@ -275,15 +304,27 @@ export default class Upload extends React.Component {
                                                 <Input
                                                     placeholder={'Track Title'}
                                                     name={'title'}
+                                                    style={{
+                                                        color: this.state.darkTheme ? '#FFF' : '#161616',
+                                                    }}
                                                 />
                                                 <br />
                                                 <Input
                                                     placeholder={'Description'}
                                                     name={'description'}
                                                     multiline={true}
+                                                    style={{
+                                                        color: this.state.darkTheme ? '#FFF' : '#161616',
+                                                    }}
                                                 />
                                                 <br />
-                                                <Typography>Cover art</Typography>
+                                                <Typography
+                                                    style={{
+                                                        color: this.state.darkTheme ? '#FFF' : '#161616',
+                                                    }}
+                                                >
+                                                    Cover art
+                                                </Typography>
                                                 <Button
                                                     style={{
                                                         cursor: 'pointer',
@@ -294,6 +335,8 @@ export default class Upload extends React.Component {
                                                                         this.state.imageBase64?
                                                                         `url(${this.state.imageBase64})`:
                                                                         null
+                                                        ,
+                                                        color: this.state.darkTheme ? '#FFF' : '#161616',
                                                     }}
                                                     containerElement='label'
                                                     label='Upload a cover art for your track'>
@@ -344,8 +387,11 @@ export default class Upload extends React.Component {
                                    <AbsoluteCenter>
                                        <form id="youtubeImport">
                                            <Input
-                                               placeholder={'YouTube URL'}
-                                               onInput={e => {
+                                                style={{
+                                                    color: this.state.darkTheme ? '#FFF' : '#161616',
+                                                }}
+                                                placeholder={'YouTube URL'}
+                                                onInput={e => {
                                                    if(this.youtubeParser(e.target.value)){
                                                        this.setState({
                                                            isYouTubeUrl: true,
@@ -362,12 +408,18 @@ export default class Upload extends React.Component {
                                                (() => {
                                                    if(this.state.isYouTubeUrl){
                                                        return (
-                                                           <Button variant="raised" color="primary" onClick={e => this.youtubeImport(e)} disabled={this.state.youtubeButtonDisable}>{this.state.youtubeButtonText}</Button>
+                                                           <Button variant="raised" color="primary" onClick={e => this.youtubeImport(e)} disabled={this.state.youtubeButtonDisable} style={{color: this.state.darkTheme ? '#FFF' : '#161616'}}>{this.state.youtubeButtonText}</Button>
                                                        )
                                                    }else{
                                                        return(
                                                            <div>
-                                                               <Typography>Not a valid YouTube URL</Typography>
+                                                               <Typography
+                                                                style={{
+                                                                    color: this.state.darkTheme ? '#FFF' : '#161616',
+                                                                }}
+                                                               >
+                                                                   Not a valid YouTube URL
+                                                                </Typography>
                                                                <br />
                                                                <Button variant="raised" color="primary" disabled={true}>{this.state.youtubeButtonText}</Button>
                                                            </div>
