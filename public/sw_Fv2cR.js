@@ -33,6 +33,9 @@ const preCacheList = [
 
   // Firebase 4.13.0 SDK
   'https://www.gstatic.com/firebasejs/4.13.0/firebase.js',
+
+  // Socket.io client library
+  'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js',
 ];
 
 self.addEventListener('install', event => {
@@ -52,7 +55,21 @@ self.addEventListener('fetch', event => {
   // Socket.io stuff
   if(event.request.url.includes('socket.io')){
     return event.respondWith(
-      fetch(event.request)
+      caches.open(_cacheName)
+      .then(cache => {
+        return cache.match('https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js')
+        .then(response => {
+          if(response){
+            return response;
+          }else{
+            return fetch('https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js')
+            .then(response => {
+              cache.put(event.request, response.clone());
+              return response;
+            })
+          }
+        })
+      })
     )
   }
 
