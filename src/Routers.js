@@ -14,6 +14,7 @@ import UploadPage from './Pages/Upload';
 import Notification from './Component/Notification';
 import PlaylistPage from './Pages/Playlist';
 import TagPage from './Pages/Tag';
+import Favorites from './Pages/Favorites';
 
 import {
     BrowserRouter,
@@ -66,6 +67,7 @@ export default class Routers extends React.Component {
                             <Route exact path="/my/playlist" component={MyPlaylist}/>
                             <Route exact path="/prime/about" component={AboutPrimePage}/>
                             <Route exact path="/upload" component={UploadPage}/>
+                            <Route path="/favorites" component={Favorites}/>
                             <Route path="/auth/callback" component={Login}/>
                             
                             <Route exact path="/@:username" component={ProfilePage}/>

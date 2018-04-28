@@ -262,13 +262,15 @@ class MenuAppBar extends React.Component {
           >
 
           <List component="nav">
-
-            <ListItem button>
-              <ListItemIcon>
-                <FavoriteIcon />
-              </ListItemIcon>
-              <ListItemText primary="Favoite" />
-            </ListItem>
+            
+            <Link to={'/favorites'}>
+              <ListItem button>
+                <ListItemIcon>
+                  <FavoriteIcon />
+                </ListItemIcon>
+                <ListItemText primary="Favorites" />
+              </ListItem>
+            </Link>
 
             <Link to={'/my/playlist'}>
               <ListItem button>
