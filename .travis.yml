@@ -12,18 +12,12 @@ cache: yarn
 services:
   - docker
 
-before_install:
-  - npm install -g yarn
-
-install:
-  - yarn
-
 # After the test is success, build the Docker image and push it into the Docker Hub
 
 after_success:
   - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
       docker --version ;
-      docker build -t moongod101/hs-material-client ;
+      docker build -t moongod101/hs-material-client . ;
       docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD ;
       docker push moongod101/hs-material-client ;
     fi
