@@ -12,6 +12,12 @@ cache: yarn
 services:
   - docker
 
+before_install:
+  - npm install -g yarn
+
+install:
+  - yarn
+
 # After the test is success, build the Docker image and push it into the Docker Hub
 
 after_success:
