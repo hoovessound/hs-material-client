@@ -222,7 +222,9 @@ class MenuAppBar extends React.Component {
                         </MenuItem>
                         <MenuItem onClick={() => {
                           this.handleClose;
-                          cookie.remove('jwt_token');
+                          cookie.remove('jwt_token', {
+                            domain: `.${window.location.hostname}`,
+                          });
                           window.location = '/';
                         }}>Logout</MenuItem>
                       </Menu>
