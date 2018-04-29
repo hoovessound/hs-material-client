@@ -6,7 +6,7 @@ let token;
 let id;
 let _socket;
 
-const socket = io(getApiUrl('$NA', '/', false));
+const socket = io(getApiUrl('socket', '/', false));
 _socket = socket;
 socket.on('connect', () => {
     const jwtToken = cookies.load('jwt_token');
