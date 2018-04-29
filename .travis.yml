@@ -9,6 +9,10 @@ sudo: required
 
 cache: yarn
 
+cache:
+  directories:
+    - "node_modules"
+
 services:
   - docker
 
