@@ -15,6 +15,8 @@ import Notification from './Component/Notification';
 import PlaylistPage from './Pages/Playlist';
 import TagPage from './Pages/Tag';
 import Favorites from './Pages/Favorites';
+import cookies from 'react-cookies';
+import getApiUrl from './Utils/getApiUrl';
 
 import {
     BrowserRouter,
@@ -62,7 +64,19 @@ export default class Routers extends React.Component {
                     >
                         <Switch>
 
-                            <Route exact path="/login" component={LoginPage}/>
+                            <Route exact path="/login" render={() => {
+                                if(cookies.load('jwt_token')) {
+                                    window.location = '/';
+                                }else{
+                                    window.location = getApiUrl('id', `/login?service=hs_service_login&redirect=${window.location.href}`, false);
+                                }
+                            }}/>
+                            <Route exact path="/logout" render={() => {
+                                cookies.remove('jwt_token', {
+                                    domain: `.${window.location.hostname}`,
+                                });
+                                window.location = '/';
+                            }}/>
                             <Route exact path="/setting" component={SettingsPage}/>
                             <Route exact path="/my/playlist" component={MyPlaylist}/>
                             <Route exact path="/prime/about" component={AboutPrimePage}/>

@@ -220,13 +220,9 @@ class MenuAppBar extends React.Component {
                             Setting
                           </Link>
                         </MenuItem>
-                        <MenuItem onClick={() => {
-                          this.handleClose;
-                          cookie.remove('jwt_token', {
-                            domain: `.${window.location.hostname}`,
-                          });
-                          window.location = '/';
-                        }}>Logout</MenuItem>
+                        <Link to={'/logout'}>
+                          <MenuItem>Logout</MenuItem>
+                        </Link>
                       </Menu>
                     </div>
                   )
@@ -234,11 +230,9 @@ class MenuAppBar extends React.Component {
                   return (
                     <div>
                       <Tooltip title="Click to login">
-                        <Button variant="raised"
-                          onClick={() => {
-                            window.location = '/login';
-                          }}
-                        >Login</Button>
+                        <Link to={'/login'}>
+                          <Button variant="raised">Login</Button>
+                        </Link>
                       </Tooltip>
                     </div>
                   )

@@ -7,11 +7,12 @@ import cookies from 'react-cookies';
 export default class Login extends React.Component {
 
   componentDidMount(){
-    if(cookies.load('jwt_token')) {
-      window.location = '/';
-    }else{
-      window.location = getApiUrl('id', `/login?service=hs_service_login&redirect=${window.location.href}`);
-    }
+    console.log(this.props.history.goBack())
+    // if(cookies.load('jwt_token')) {
+    //   window.location = '/';
+    // }else{
+    //   window.location = getApiUrl('id', `/login?service=hs_service_login&redirect=${window.location.href}`, false);
+    // }
   }
 
   render(){
