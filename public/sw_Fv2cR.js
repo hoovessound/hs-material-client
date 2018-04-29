@@ -50,165 +50,168 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
-  // When the browser trys to fetch something like making an API call or getting an image from Imgur, this event kicks in
-
-  // Socket.io stuff
-  if(event.request.url.includes('socket.io')){
-    return event.respondWith(
-      caches.open(_cacheName)
-      .then(cache => {
-        return cache.match('https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js')
-        .then(response => {
-          if(response){
-            return response;
-          }else{
-            return fetch('https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js')
-            .then(response => {
-              cache.put(event.request, response.clone());
-              return response;
-            })
-          }
-        })
-      })
-    )
-  }
-
-  if(event.request.url.includes('sockjs-node')){
-    return event.respondWith(
-      fetch(event.request)
-    )
-  }
-
-  if(event.request.url.endsWith('.map')){
-    return event.respondWith(
-      fetch(event.request)
-    )
-  }
-
-  if(event.request.url.includes('google-analytics.com')){
-    return event.respondWith(
-      fetch(event.request)
-    )
-  }
-
-  if(event.request.url.includes('events')){
-    return event.respondWith(
-      fetch(event.request)
-    )
-  }
-
-  if(event.request.url.includes('hot-update')){
-    return event.respondWith(
-      fetch(event.request)
-    )
-  }
-
-  // Cache first
-
-  if(event.request.url.includes('api.hoovessound') && event.request.url.includes('/image/') && event.request.method === 'GET'){
-    // HoovesSound Image API
-    // Serive cache version first
-    return event.respondWith(
-      caches.open(_cacheName).then((cache) => {
-        return cache.match(event.request).then((response) => {
-          if (response) {
-            fetch(event.request).then((response) => {
-              cache.put(event.request, response.clone());
-            });
-            return response;
-          }else{
-            return fetch(event.request).then((response) => {
-              cache.put(event.request, response.clone());
-              return response;
-            });
-          }
-        })
-      })
-    )
-  }
-
-  if(event.request.url.includes('fonts.googleapis.com') && event.request.method === 'GET'){
-    // HoovesSound Image API
-    // Serve cache version first
-    return event.respondWith(
-      caches.open(_cacheName).then((cache) => {
-        return cache.match(event.request).then((response) => {
-          if (response) {
-            fetch(event.request).then((response) => {
-              cache.put(event.request, response.clone());
-            });
-            return response;
-          }else{
-            return fetch(event.request).then((response) => {
-              cache.put(event.request, response.clone());
-              return response;
-            });
-          }
-        })
-      })
-    )
-  }
-
-  if(event.request.url.includes('stream.hoovessound') && event.request.method === 'GET'){
-    // HoovesSound Music Streaming API
-    // Serve the cache version first
-    return event.respondWith(
-      caches.open(_cacheName)
-      .then(cache => {
-        return cache.match(event.request)
-        .then(response => {
-          if (response) {
-            fetch(event.request).then((response) => {
-              cache.put(event.request, response.clone());
-            });
-            return response;
-          }else{
-            return fetch(event.request).then((response) => {
-              cache.put(event.request, response.clone());
-              return response;
-            });
-          }
-        })
-      })
-    )
-  }
-
-  // Network first caching method
-
-  /*
-    Flow:
-    Online: API Call -> Network fetch -> Update cache
-    Offline (with cache): API Call -> Network fetch(Fail) -> Serve cache
-    Offline (without cache): API Call -> Network fetch(Fail) -> Serve cache(Fail) -> Serve offline.html -> IDK lol
-  */
-
   if(event.request.method === 'GET'){
-    return event.respondWith(
-       fetch(event.request)
-        .then(networkResponse => {
-          return caches.open(_cacheName)
-          .then(cache => {
-            cache.put(event.request, networkResponse.clone());
-            return networkResponse;
+
+    // When the browser try to fetch something like making an API call or getting an image from Imgur, this event kicks in
+
+    // Socket.io stuff
+    if(event.request.url.includes('socket.io')){
+      return event.respondWith(
+        caches.open(_cacheName)
+        .then(cache => {
+          return cache.match('https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js')
+          .then(response => {
+            if(response){
+              return response;
+            }else{
+              return fetch('https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js')
+              .then(response => {
+                cache.put(event.request, response.clone());
+                return response;
+              })
+            }
           })
         })
-        .catch(() => {
-          return caches.open(_cacheName)
-          .then(cache => {
-            return cache.match(event.request)
-            .then(response => {
-              if(response){
+      )
+    }
+
+    if(event.request.url.includes('sockjs-node')){
+      return event.respondWith(
+        fetch(event.request)
+      )
+    }
+
+    if(event.request.url.endsWith('.map')){
+      return event.respondWith(
+        fetch(event.request)
+      )
+    }
+
+    if(event.request.url.includes('google-analytics.com')){
+      return event.respondWith(
+        fetch(event.request)
+      )
+    }
+
+    if(event.request.url.includes('events')){
+      return event.respondWith(
+        fetch(event.request)
+      )
+    }
+
+    if(event.request.url.includes('hot-update')){
+      return event.respondWith(
+        fetch(event.request)
+      )
+    }
+
+    // Cache first
+
+    if(event.request.url.includes('api.hoovessound') && event.request.url.includes('/image/')){
+      // HoovesSound Image API
+      // Serive cache version first
+      return event.respondWith(
+        caches.open(_cacheName).then((cache) => {
+          return cache.match(event.request).then((response) => {
+            if (response) {
+              fetch(event.request).then((response) => {
+                cache.put(event.request, response.clone());
+              });
+              return response;
+            }else{
+              return fetch(event.request).then((response) => {
+                cache.put(event.request, response.clone());
                 return response;
-              }else{
-                return cache.match('/offline.html')
-                .then(response => {
-                  return response;
-                })
-              }
+              });
+            }
+          })
+        })
+      )
+    }
+
+    if(event.request.url.includes('fonts.googleapis.com') && event.request.method === 'GET'){
+      // HoovesSound Image API
+      // Serve cache version first
+      return event.respondWith(
+        caches.open(_cacheName).then((cache) => {
+          return cache.match(event.request).then((response) => {
+            if (response) {
+              fetch(event.request).then((response) => {
+                cache.put(event.request, response.clone());
+              });
+              return response;
+            }else{
+              return fetch(event.request).then((response) => {
+                cache.put(event.request, response.clone());
+                return response;
+              });
+            }
+          })
+        })
+      )
+    }
+
+    if(event.request.url.includes('stream.hoovessound') && event.request.method === 'GET'){
+      // HoovesSound Music Streaming API
+      // Serve the cache version first
+      return event.respondWith(
+        caches.open(_cacheName)
+        .then(cache => {
+          return cache.match(event.request)
+          .then(response => {
+            if (response) {
+              fetch(event.request).then((response) => {
+                cache.put(event.request, response.clone());
+              });
+              return response;
+            }else{
+              return fetch(event.request).then((response) => {
+                cache.put(event.request, response.clone());
+                return response;
+              });
+            }
+          })
+        })
+      )
+    }
+
+    // Network first caching method
+
+    /*
+      Flow:
+      Online: API Call -> Network fetch -> Update cache
+      Offline (with cache): API Call -> Network fetch(Fail) -> Serve cache
+      Offline (without cache): API Call -> Network fetch(Fail) -> Serve cache(Fail) -> Serve offline.html -> IDK lol
+    */
+
+    if(event.request.method === 'GET'){
+      return event.respondWith(
+        fetch(event.request)
+          .then(networkResponse => {
+            return caches.open(_cacheName)
+            .then(cache => {
+              cache.put(event.request, networkResponse.clone());
+              return networkResponse;
             })
           })
-        })
-    );
+          .catch(() => {
+            return caches.open(_cacheName)
+            .then(cache => {
+              return cache.match(event.request)
+              .then(response => {
+                if(response){
+                  return response;
+                }else{
+                  return cache.match('/offline.html')
+                  .then(response => {
+                    return response;
+                  })
+                }
+              })
+            })
+          })
+      );
+    }
   }
 });
 
