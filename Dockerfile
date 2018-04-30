@@ -1,16 +1,17 @@
 FROM node
 
+RUN curl -o- -L https://yarnpkg.com/install.sh | bash
+
 WORKDIR /app
 
 COPY package.json .
 
-RUN npm install
+RUN yarn install && \
+    yarn global add serve
 
 COPY . .
 
-RUN npm run build
-
-RUN npm install serve -g
+RUN yarn build
 
 CMD serve -tns build
 
