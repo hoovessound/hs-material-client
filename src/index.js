@@ -3,5 +3,13 @@ import ReactDom from 'react-dom';
 import Routers from './Routers';
 import './Utils/socketIoAuth';
 import './SCSS/index.scss';
-document.querySelector('#first_paint').style.display = 'none';
+
+const disableAnimation = localStorage.getItem('hs_disable_animation') === 'true' ? true : false;
+const firstPaintElement = document.querySelector('#first_paint');
+document.querySelector('#first_paint .load-bar').style.display = 'none';
+if(disableAnimation){
+    firstPaintElement.style.display = 'none';
+}else{
+    firstPaintElement.style.animation = 'fade-up 0.9s ease-in-out both';
+}
 ReactDom.render(<Routers />, document.getElementById('app'));

@@ -18,7 +18,7 @@
       }
     </style>
 
-    <div id="first_paint" style="display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #1D566E;">
+    <div id="first_paint" style="display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #1D566E;position: fixed; top: 0em; left: 0em; overflow: hidden; z-index: 999;">
       <div id="text">
         <h1 style="font-family: Roboto; color: #161616;">HoovesSound</h1>
         <h4 style="font-family: Roboto; color: #161616; text-align: right; color: #c4c5c6">Streaming Pony Music <br /> Anytime Anywhere</h4>
@@ -64,6 +64,17 @@
           from {left: 50%; width: 0;z-index:100;}
           33.3333% {left: 0; width: 100%;z-index: 10;}
           to {left: 0; width: 100%;}
+        }
+
+        @keyframes fade-up {
+          0% {
+            opacity: 1;
+            transform: none;
+          }
+          100% {
+            opacity: 1;
+            transform: translate3d(0,-102vh,0);
+          }
         }
       </style>
       
