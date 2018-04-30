@@ -10,6 +10,6 @@ document.querySelector('#first_paint .load-bar').style.display = 'none';
 if(disableAnimation){
     firstPaintElement.style.display = 'none';
 }else{
-    firstPaintElement.style.animation = 'fade-up 0.9s ease-in-out both';
+    firstPaintElement.style.animation = 'fade-up 0.4s ease-in both';
 }
 ReactDom.render(<Routers />, document.getElementById('app'));
