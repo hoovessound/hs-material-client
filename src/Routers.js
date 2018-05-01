@@ -1,12 +1,10 @@
 import React from 'react';
 import HomePage from './Pages/Home'
-import Login from './Pages/Login';
 import NavBar from './Component/NavBar';
 import Player from './Component/Player';
 import Page404 from './Pages/Error/404';
 import ProfilePage from './Pages/User';
 import SettingsPage from './Pages/Setting';
-import LoginPage from './Pages/Login';
 import TrackPage from './Pages/Track';
 import MyPlaylist from './Pages/My/MyPlaylist';
 import AboutPrimePage from './Pages/AboutPrime';
@@ -82,7 +80,6 @@ export default class Routers extends React.Component {
                             <Route exact path="/prime/about" component={AboutPrimePage}/>
                             <Route exact path="/upload" component={UploadPage}/>
                             <Route path="/favorites" component={Favorites}/>
-                            <Route path="/auth/callback" component={Login}/>
                             
                             <Route exact path="/@:username" component={ProfilePage}/>
                             <Route exact path="/track/:id" component={TrackPage}/>
