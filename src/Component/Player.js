@@ -133,6 +133,12 @@ export default class Player extends React.Component {
       this.refs.hs_track_player.classList.remove('offline');
     });
 
+    // Init network status check
+    if(!navigator.onLine){
+      this.refs.networkStatusBar.classList.add('offline');
+      this.refs.hs_track_player.classList.add('offline');
+    }
+    
     window.onkeydown = (event) => this.hotKey(event);
     playerEmitter.addListener('play', track => {
       if(track.mute){
