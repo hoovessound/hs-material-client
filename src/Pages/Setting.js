@@ -17,7 +17,7 @@ import Dialog, {
 
 import Slide from 'material-ui/transitions/Slide';
 import getApiUrl from '../Utils/getApiUrl'
-import axios from 'axios'
+import axios from 'axios';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -308,7 +308,6 @@ export default class Settings extends React.Component {
             </Emojify>
           </IconButton>
         </Typography>
-
       </div>
     )
   }
