@@ -82,13 +82,10 @@ if (workbox) {
     workbox.strategies.networkFirst()
   )
 
-  self.addEventListener('install', event => {
-    workbox.routing.registerRoute(
-      new RegExp(/.*/),
-      workbox.strategies.staleWhileRevalidate(),
-    )
-  });
-
+  workbox.routing.registerRoute(
+    new RegExp(/.*/),
+    workbox.strategies.staleWhileRevalidate(),
+  )
 }else{
   console.error('Workbox library didn\'t load, service worker don\'t execute')
 }
