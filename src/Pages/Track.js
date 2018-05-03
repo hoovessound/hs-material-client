@@ -26,6 +26,7 @@ import { notificationEmitter } from '../Component/Notification';
 import * as globalObject from '../Utils/globalObject';
 import TextField from 'material-ui/TextField';
 import TrackPlayerCard from '../Component/TrackPlayerCard';
+import Chip from 'material-ui/Chip';
 
 import '../SCSS/TrackPage.scss';
 
@@ -347,7 +348,9 @@ export default class TrackPage extends React.Component {
                     onKeyDown={e => {
                       if(e.keyCode === 13){
                         // ENTER
-                        this.updateTrack();
+                        if(document.activeElement.id !== 'addTagField'){
+                          this.updateTrack();
+                        }
                       }
                     }}
                   >
@@ -377,6 +380,66 @@ export default class TrackPage extends React.Component {
                         }}
                         onInput={e => this.setState({ trackDescription: e.target.value })}
                       />
+
+                      {/* Tags */}
+
+
+                      <div>
+                        <TextField
+                          label="Tag Name"
+                          margin="normal"
+                          style={{
+                            width: '100%',
+                          }}
+                          id="addTagField"
+                          onKeyDown={e => {
+                            if(e.keyCode === 13){
+                              // ENTER
+                              const tag = document.activeElement.value;
+                              const track = this.state.track;
+                              track.tags.push(tag);
+                              axios.post(getApiUrl('api', `/track/${this.state.track.id}/tag`), {
+                                tag,
+                              });
+                              this.setState({
+                                track,
+                              });
+                              document.activeElement.value = '';
+                            }
+                          }}
+                        />
+                        {
+                          (() => {
+                            const tags = [];
+                            if(this.state.track.tags.length >= 1){
+                              this.state.track.tags.map(tag => {
+                                if(tag !== `artist:${this.state.track.author.username}`){
+                                  return tags.push(
+                                    <Chip
+                                      label={tag}
+                                      onDelete={() => {
+                                        axios.delete(getApiUrl('api', `/track/${this.state.track.id}/tag`), {
+                                          tag,
+                                        });
+                                        const track = this.state.track;
+                                        const index = track.tags.indexOf(tag);
+                                        if (index > -1) {
+                                          track.tags.splice(index, 1);
+                                        }
+                                        this.setState({
+                                          track,
+                                        });
+                                      }}
+                                    />
+                                  )
+                                }
+                              });
+                              return tags;
+                            }
+                          })()
+                        }
+                      </div>
+
                     </DialogContent>
                     <DialogActions>
                       <Button onClick={() => this.setState({ editIsOpen: false })} color="primary">
