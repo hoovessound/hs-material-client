@@ -15,6 +15,7 @@ import TagPage from './Pages/Tag';
 import Favorites from './Pages/Favorites';
 import cookies from 'react-cookies';
 import getApiUrl from './Utils/getApiUrl';
+import Analytics from './Utils/react-router-ga';
 
 import {
     BrowserRouter,
@@ -45,53 +46,55 @@ export default class Routers extends React.Component {
     render() {
         return (
             <BrowserRouter>
-                <div
-                    style={{
-                        marginBottom: '5.5em',
-                        marginTop: '4.5em',
-                    }}
-                >
-                    <NavBar/>
-
+                <Analytics id={'UA-80478168-2'} >
                     <div
                         style={{
-                            margin: 'auto',
-                            width: '90vw',
-                            position: 'relative'
+                            marginBottom: '5.5em',
+                            marginTop: '4.5em',
                         }}
                     >
-                        <Switch>
+                        <NavBar/>
 
-                            <Route exact path="/login" render={() => {
-                                if(cookies.load('jwt_token')) {
+                        <div
+                            style={{
+                                margin: 'auto',
+                                width: '90vw',
+                                position: 'relative'
+                            }}
+                        >
+                            <Switch>
+
+                                <Route exact path="/login" render={() => {
+                                    if(cookies.load('jwt_token')) {
+                                        window.location = '/';
+                                    }else{
+                                        window.location = getApiUrl('id', `/login?service=hs_service_login&redirect=${window.location.href}`, false);
+                                    }
+                                }}/>
+                                <Route exact path="/logout" render={() => {
+                                    cookies.remove('jwt_token', {
+                                        domain: `.${window.location.hostname}`,
+                                    });
                                     window.location = '/';
-                                }else{
-                                    window.location = getApiUrl('id', `/login?service=hs_service_login&redirect=${window.location.href}`, false);
-                                }
-                            }}/>
-                            <Route exact path="/logout" render={() => {
-                                cookies.remove('jwt_token', {
-                                    domain: `.${window.location.hostname}`,
-                                });
-                                window.location = '/';
-                            }}/>
-                            <Route exact path="/setting" component={SettingsPage}/>
-                            <Route exact path="/my/playlist" component={MyPlaylist}/>
-                            <Route exact path="/prime/about" component={AboutPrimePage}/>
-                            <Route exact path="/upload" component={UploadPage}/>
-                            <Route path="/favorites" component={Favorites}/>
-                            
-                            <Route exact path="/@:username" component={ProfilePage}/>
-                            <Route exact path="/track/:id" component={TrackPage}/>
-                            <Route exact path="/playlist/:id" component={PlaylistPage}/>
-                            <Route exact path="/tag/:tag" component={TagPage}/>
-                            <Route exact path="/:offset?" component={HomePage}/>
-                            <Route component={Page404}/>
-                        </Switch>
+                                }}/>
+                                <Route exact path="/setting" component={SettingsPage}/>
+                                <Route exact path="/my/playlist" component={MyPlaylist}/>
+                                <Route exact path="/prime/about" component={AboutPrimePage}/>
+                                <Route exact path="/upload" component={UploadPage}/>
+                                <Route path="/favorites" component={Favorites}/>
+                                
+                                <Route exact path="/@:username" component={ProfilePage}/>
+                                <Route exact path="/track/:id" component={TrackPage}/>
+                                <Route exact path="/playlist/:id" component={PlaylistPage}/>
+                                <Route exact path="/tag/:tag" component={TagPage}/>
+                                <Route exact path="/:offset?" component={HomePage}/>
+                                <Route component={Page404}/>
+                            </Switch>
+                        </div>
+                        <Player/>
+                        <Notification ref={'notification'} />
                     </div>
-                    <Player/>
-                    <Notification ref={'notification'} />
-                </div>
+                </Analytics>
             </BrowserRouter>
         )
     }
