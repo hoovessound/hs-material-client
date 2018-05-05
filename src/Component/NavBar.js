@@ -320,6 +320,18 @@ class MenuAppBar extends React.Component {
               </a>
               </Tooltip>
             </ListItem>
+
+            <ListItem>
+              <Typography>
+              <a href="https://about.hoovessound.ml/copyright" target="_blank" rel="noopener noreferrer"
+                style={{
+                  margin: '0em 0.5em',
+                }}
+              >Copyright</a>
+              <a href="https://about.hoovessound.ml/privacy" target="_blank" rel="noopener noreferrer">Privacy</a>
+              </Typography>
+            </ListItem>
+
           </List>
           </div>
         </SwipeableDrawer>
