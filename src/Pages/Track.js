@@ -433,6 +433,7 @@ export default class TrackPage extends React.Component {
                                     />
                                   )
                                 }
+                                return true;
                               });
                               return tags;
                             }
