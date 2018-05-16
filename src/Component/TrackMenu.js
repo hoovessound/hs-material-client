@@ -3,7 +3,9 @@ import Menu, { MenuItem } from 'material-ui/Menu';
 import { notificationEmitter } from '../Component/Notification';
 import Emojify from 'react-emojione';
 import getApiUrl from '../Utils/getApiUrl';
+import isLogin from '../Utils/isLogin';
 import axios from 'axios';
+import { Link } from "react-router-dom";
 
 class SimpleMenu extends React.Component {
   state = {
@@ -58,26 +60,52 @@ class SimpleMenu extends React.Component {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          <MenuItem onClick={this.favoriteThisTrack.bind(this)}>
-            <Emojify style={{height: 17, width: 17}}>
-              :heart:
-            </Emojify>
-            Favorite
-          </MenuItem>
 
-          <MenuItem onClick={this.fireReport.bind(this)}>
-            <Emojify style={{height: 17, width: 17}}>
-              :writing_hand:
-            </Emojify>
-            Report
-          </MenuItem>
+          {
+            (() => {
+              if(isLogin()){
+                return (
+                  <span
+                    style={{
+                      outline: 'none',
+                    }}
+                  >
+                    <MenuItem onClick={this.favoriteThisTrack.bind(this)}>
+                      <Emojify style={{height: 17, width: 17}}>
+                        :heart:
+                      </Emojify>
+                      Favorite
+                    </MenuItem>
 
-          <MenuItem onClick={this.fireReport.bind(this)}>
-            <Emojify style={{height: 17, width: 17}}>
-              :thumbsdown:
-            </Emojify>
-            This track
-          </MenuItem>
+                    <MenuItem onClick={this.fireReport.bind(this)}>
+                      <Emojify style={{height: 17, width: 17}}>
+                        :writing_hand:
+                      </Emojify>
+                      Report
+                    </MenuItem>
+
+                    <MenuItem onClick={this.fireReport.bind(this)}>
+                      <Emojify style={{height: 17, width: 17}}>
+                        :thumbsdown:
+                      </Emojify>
+                      This track
+                    </MenuItem>
+                  </span>
+                )
+              }else{
+                return (
+                  <Link 
+                    to={'/login'}
+                    style={{
+                      outline: 'none',
+                    }}
+                  >
+                    <MenuItem>Please login</MenuItem>
+                  </Link>
+                )
+              }
+            })()
+          }
 
         </Menu>
       </div>

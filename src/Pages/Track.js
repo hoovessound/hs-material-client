@@ -27,6 +27,7 @@ import * as globalObject from '../Utils/globalObject';
 import TextField from 'material-ui/TextField';
 import TrackPlayerCard from '../Component/TrackPlayerCard';
 import Chip from 'material-ui/Chip';
+import isLogin from '../Utils/isLogin';
 
 import '../SCSS/TrackPage.scss';
 
@@ -545,16 +546,24 @@ export default class TrackPage extends React.Component {
 
             <div className="text" >
 
-              <Tooltip title={'Playlist'} >
-                <IconButton
-                  onClick={() => this.setState({ playlistIsOpen: true })}
-                  style={{
-                    color: this.state.darkTheme ? '#FFF' : '#161616',
-                  }}
-                >
-                  <ListIcon />
-                </IconButton>
-              </Tooltip>
+              {
+                (() => {
+                  if(isLogin()){
+                    return (
+                      <Tooltip title={'Playlist'} >
+                        <IconButton
+                          onClick={() => this.setState({ playlistIsOpen: true })}
+                          style={{
+                            color: this.state.darkTheme ? '#FFF' : '#161616',
+                          }}
+                        >
+                          <ListIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )
+                  }
+                })()
+              }
 
               {
                 (() => {
@@ -589,10 +598,18 @@ export default class TrackPage extends React.Component {
                           height: '15em',
                         }}>
                           <div id="comments">{this.eachComment()}</div>
-                          <ComentInputField
-                            id={this.state.track.id}
-                            onChange={data => this.updateCommentList(data)}
-                          />
+                          {
+                            (() => {
+                              if(isLogin()){
+                                return (
+                                  <ComentInputField
+                                    id={this.state.track.id}
+                                    onChange={data => this.updateCommentList(data)}
+                                  />
+                                )
+                              }
+                            })()
+                          }
                         </div>
                       )
                     }

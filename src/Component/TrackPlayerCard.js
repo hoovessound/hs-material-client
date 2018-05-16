@@ -24,6 +24,7 @@ import Menu, { MenuItem } from 'material-ui/Menu';
 import { notificationEmitter } from './Notification';
 import Chip from 'material-ui/Chip';
 import axios from 'axios';
+import isLogin from '../Utils/isLogin';
 
 import FavoriteIcon from 'material-ui-icons/Favorite';
 import PlayArrowIcon from 'material-ui-icons/PlayArrow';
@@ -224,25 +225,36 @@ class RecipeReviewCard extends React.Component {
                     />
 
                     <CardActions className={classes.actions} disableActionSpacing>
-                        <IconButton aria-label="Add to favorites"
-                            onClick={() => this.favoriteThisTrack()}
-                        >
-                            {
-                                (() => {
-                                    if(this.state.isFavorite){
-                                        return (
-                                            <FavoriteIcon style={{
-                                                color: 'red',
-                                            }} />
-                                        )
-                                    }else{
-                                        return (
-                                            <FavoriteIcon />
-                                        )
-                                    }
-                                })()
-                            }
-                        </IconButton>
+                        
+
+                        {
+                            (() => {
+                                if(isLogin()){
+                                    return (
+                                        <IconButton aria-label="Add to favorites"
+                                            onClick={() => this.favoriteThisTrack()}
+                                        >
+                                            {
+                                                (() => {
+                                                    if(this.state.isFavorite){
+                                                        return (
+                                                            <FavoriteIcon style={{
+                                                                color: 'red',
+                                                            }} />
+                                                        )
+                                                    }else{
+                                                        return (
+                                                            <FavoriteIcon />
+                                                        )
+                                                    }
+                                                })()
+                                            }
+                                        </IconButton>
+                                    )
+                                }
+                            })()
+                        }
+
                         <IconButton aria-label="Play/pause" onClick={() => playerEmitter.emit('play', track)}>
                             <PlayArrowIcon />
                         </IconButton>

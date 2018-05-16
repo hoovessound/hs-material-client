@@ -22,6 +22,7 @@ import isDarkTheme from '../Utils/isDarkTheme';
 import { EventEmitter } from 'fbemitter';
 import googleCacheImage from '../Utils/googleCacheImage';
 import * as globalObject from '../Utils/globalObject';
+import isLogin from '../Utils/isLogin';
 import { SettingsEmitter } from '../Pages/Setting';
 import Emojify from 'react-emojione';
 
@@ -79,10 +80,23 @@ class MenuAppBar extends React.Component {
     }
   }
 
+  async getLatestTrack(cb){
+    const response = await axios.get(getApiUrl('api', '/tracks?limit=1'));
+    if(!response.data.error){
+      if(typeof cb === 'function'){
+        cb();
+      }
+      emitter.emit('loadLatestTrack', response.data[0]);
+    }
+  }
+
   componentDidMount(){
     this.updateBackgroundColor(this.state.darkTheme);
-    if(cookie.load('jwt_token')){
-      this.fetchUserInfo();    
+
+    if(isLogin()){
+      this.fetchUserInfo();
+    }else{
+      this.getLatestTrack();
     }
     SettingsEmitter.addListener('setting.disableAnimation', navBarBackgroundTransition => this.setState({navBarBackgroundTransition}));
   }
@@ -150,7 +164,7 @@ class MenuAppBar extends React.Component {
 
             {
               (() => {
-                if(cookie.load('jwt_token')){
+                if(isLogin()){
                   return (
                     <div>
 
@@ -259,23 +273,37 @@ class MenuAppBar extends React.Component {
 
           <List component="nav">
             
-            <Link to={'/favorites'}>
-              <ListItem button>
-                <ListItemIcon>
-                  <FavoriteIcon />
-                </ListItemIcon>
-                <ListItemText primary="Favorites" />
-              </ListItem>
-            </Link>
+            {
+              (() => {
+                if(isLogin()){
+                  return (
+                    <div>
+                      <Link to={'/favorites'}>
+                        <ListItem button>
+                          <ListItemIcon>
+                            <FavoriteIcon />
+                          </ListItemIcon>
+                          <ListItemText primary="Favorites" />
+                        </ListItem>
+                      </Link>
 
-            <Link to={'/my/playlist'}>
-              <ListItem button>
-                <ListItemIcon>
-                  <ListIcon />
-                </ListItemIcon>
-                <ListItemText primary="Playlist" />
-              </ListItem>
-            </Link>
+                      <Link to={'/my/playlist'}>
+                        <ListItem button>
+                          <ListItemIcon>
+                            <ListIcon />
+                          </ListItemIcon>
+                          <ListItemText primary="Playlist" />
+                        </ListItem>
+                      </Link>
+                    </div>
+                  )
+                }else{
+                  <ListItem button>
+                    <ListItemText primary="To use some of the feature, please login" />
+                  </ListItem>
+                }
+              })()
+            }
 
             <Link to={'/prime/about'}>
               <ListItem button>

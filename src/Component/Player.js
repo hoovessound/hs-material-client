@@ -249,6 +249,12 @@ export default class Player extends React.Component {
     });
 
     emitter.addListener('loadUserHistory', history => this.loadUserHistory(history));
+
+    emitter.addListener('loadLatestTrack', track => {
+      this.setState({
+        track,
+      });
+    });
   }
 
   playlistNextTrack(){
