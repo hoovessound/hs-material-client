@@ -9,6 +9,7 @@ import { GridListTile, GridListTileBar } from 'material-ui/GridList';
 import TrackMenu from './TrackMenu';
 import { Link } from 'react-router-dom';
 import googleCacheImage from '../Utils/googleCacheImage';
+import renderHTML from 'react-render-html';
 
 export default class TrackContainer extends React.Component {
 
@@ -91,12 +92,14 @@ export default class TrackContainer extends React.Component {
         <GridListTileBar
           title={
             <Link to={`/track/${track.id}`}>
-              {track.title}
+              {
+                renderHTML(track.title)
+              }
             </Link>
           }
           subtitle={
             <Link to={`/@${track.author.username}`}>
-              @{track.author.username}
+              @{renderHTML(track.author.username)}
             </Link>
           }
           actionIcon={
