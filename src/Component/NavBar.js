@@ -305,14 +305,14 @@ class MenuAppBar extends React.Component {
               })()
             }
 
-            <Link to={'/prime/about'}>
+            <a href="https://www.patreon.com/felixfong227">
               <ListItem button>
                 <ListItemIcon>
                   <AttachMoney />
                 </ListItemIcon>
-                <ListItemText primary="Prime Q&A" />
+                <ListItemText primary="Patreon" />
               </ListItem>
-            </Link>
+            </a>
 
             {/*
               <ListItem button>
