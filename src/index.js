@@ -6,10 +6,21 @@ import './SCSS/index.scss';
 
 const disableAnimation = localStorage.getItem('hs_disable_animation') === 'true' ? true : false;
 const firstPaintElement = document.querySelector('#first_paint');
+const statusText = document.querySelector('#status-text');
+
 document.querySelector('#first_paint .load-bar').style.display = 'none';
+
+setTimeout(() => {
+    statusText.style.display = 'block';
+}, 3000);
+
 if(disableAnimation){
-    firstPaintElement.style.display = 'none';
+    firstPaintElement.outerHTML = '';
 }else{
     firstPaintElement.style.animation = 'fade-up 0.4s ease-in both';
+    setTimeout(() => {
+        firstPaintElement.outerHTML = '';
+    }, 400);
 }
+
 ReactDom.render(<Routers />, document.getElementById('app'));
