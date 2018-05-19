@@ -9,7 +9,6 @@ import SyncIcon from 'material-ui-icons/Sync';
 import Icon from 'material-ui/Icon';
 import ReactSimpleRange from 'react-simple-range';
 import isDarkTheme from '../Utils/isDarkTheme';
-import googleCacheImage from '../Utils/googleCacheImage';
 import { EventEmitter } from 'fbemitter';
 import { emitter } from './NavBar';
 import axios from 'axios';
@@ -315,27 +314,27 @@ export default class Player extends React.Component {
           artist: track.author_fullName,
           artwork: [
             {
-              src: getApiUrl('api', `/image/coverart/${track.id}&width=96`),
+              src: getApiUrl('image', `/coverart/${track.id}&width=96`),
               sizes: '96x96',
             },
             {
-              src: getApiUrl('api', `/image/coverart/${track.id}&width=128`),
+              src: getApiUrl('image', `/coverart/${track.id}&width=128`),
               sizes: '128x128',
             },
             {
-              src: getApiUrl('api', `/image/coverart/${track.id}&width=192`),
+              src: getApiUrl('image', `/coverart/${track.id}&width=192`),
               sizes: '192x192',
             },
             {
-              src: getApiUrl('api', `/image/coverart/${track.id}&width=256`),
+              src: getApiUrl('image', `/coverart/${track.id}&width=256`),
               sizes: '256x256',
             },
             {
-              src: getApiUrl('api', `/image/coverart/${track.id}?width=384`),
+              src: getApiUrl('image', `/coverart/${track.id}?width=384`),
               sizes: '384x384',
             },
             {
-              src: getApiUrl('api', `/image/coverart/${track.id}?width=512`),
+              src: getApiUrl('image', `/coverart/${track.id}?width=512`),
               sizes: '512x512',
             },
           ]
@@ -396,7 +395,7 @@ export default class Player extends React.Component {
         <div className="coverart"
           style={{
             background: (() => {
-              const url = getApiUrl('api', `/image/coverart/${this.state.track.id}?width=100`);
+              const url = getApiUrl('image', `/coverart/${this.state.track.id}?width=100`);
               return `url(${url}) no-repeat center`;
             })(),
             filter: this.state.seeking ? 'blur(2px)' : 'blur(0px)',

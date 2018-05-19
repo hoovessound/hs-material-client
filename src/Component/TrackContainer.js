@@ -8,7 +8,6 @@ import isDarkTheme from '../Utils/isDarkTheme';
 import { GridListTile, GridListTileBar } from 'material-ui/GridList';
 import TrackMenu from './TrackMenu';
 import { Link } from 'react-router-dom';
-import googleCacheImage from '../Utils/googleCacheImage';
 import renderHTML from 'react-render-html';
 
 export default class TrackContainer extends React.Component {
@@ -36,8 +35,7 @@ export default class TrackContainer extends React.Component {
         <Button
           style={{
             background: (() => {
-              let url = `https://api.hoovessound.ml/image/coverart/${track.id}?width=300`;
-              url = googleCacheImage(url, 300);
+              const url = `https://image.hoovessound.ml/coverart/${track.id}?width=300`;
               return `url(${url}) no-repeat center`;
             })(),
             backgroundSize: 'cover',
@@ -60,7 +58,7 @@ export default class TrackContainer extends React.Component {
           <div
             style={{
               background: (() => {
-                const url = `https://api.hoovessound.ml/image/doodle/${track.backgrounddrop}`;
+                const url = `https://image.hoovessound.ml/doodle/${track.backgrounddrop}`;
                 return `url(${url}) no-repeat center fixed`;
               })(),
               height: '100%',

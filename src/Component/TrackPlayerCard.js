@@ -97,19 +97,19 @@ class SimpleMenu extends React.Component {
             open={Boolean(anchorEl)}
             onClose={this.handleClose}
           >
-            <a style={style} href={getApiUrl('api', `/image/coverart/${this.props.id}?width=300`, false)} target='_blank'>
+            <a style={style} href={getApiUrl('image', `/coverart/${this.props.id}?width=300`, false)} target='_blank'>
                 <MenuItem onClick={this.handleClose}>300x300(WebP)</MenuItem>
             </a>
 
-            <a style={style} href={getApiUrl('api', `/image/coverart/${this.props.id}?width=500`, false)} target='_blank'>
+            <a style={style} href={getApiUrl('image', `/coverart/${this.props.id}?width=500`, false)} target='_blank'>
                 <MenuItem onClick={this.handleClose}>500x500(WebP)</MenuItem>
             </a>
 
-            <a style={style} href={getApiUrl('api', `/image/coverart/${this.props.id}?width=600`, false)} target='_blank'>
+            <a style={style} href={getApiUrl('image', `/coverart/${this.props.id}?width=600`, false)} target='_blank'>
                 <MenuItem onClick={this.handleClose}>600x600(WebP)</MenuItem>
             </a>
 
-            <a style={style} href={getApiUrl('api', `/image/coverart/${this.props.id}?webp=false`, false)} target='_blank'>
+            <a style={style} href={getApiUrl('image', `/coverart/${this.props.id}?webp=false`, false)} target='_blank'>
                 <MenuItem onClick={this.handleClose}>Original</MenuItem>
             </a>
           </Menu>
@@ -186,7 +186,7 @@ class RecipeReviewCard extends React.Component {
                                 if(this.state.loadBigImage){
                                     return (
                                         <Image 
-                                            src={getApiUrl('api', `/image/coverart/${track.id}?width=600`, false)}
+                                            src={getApiUrl('image', `/coverart/${track.id}?width=600`, false)}
                                             float={0.1}
                                         />
                                     )
@@ -207,7 +207,7 @@ class RecipeReviewCard extends React.Component {
                     <CardHeader
                         avatar={
                             <Link to={`/@${track.author.username}`}>
-                                <Avatar aria-label={track.author.fullname} className={classes.avatar} src={getApiUrl('api', `/image/avatar/${track.author.username}?width=50`, false)} />
+                                <Avatar aria-label={track.author.fullname} className={classes.avatar} src={getApiUrl('image', `/avatar/${track.author.username}?width=50`, false)} />
                             </Link>
                         }
                         title={
@@ -220,7 +220,7 @@ class RecipeReviewCard extends React.Component {
 
                     <CardMedia
                         className={classes.media}
-                        image={getApiUrl('api', `/image/coverart/${track.id}?width=500`, false)}
+                        image={getApiUrl('image', `/coverart/${track.id}?width=500`, false)}
                         title={`${track.title} cover art`}
                     />
 
