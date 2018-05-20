@@ -12,10 +12,12 @@ export default (subdomain = 'api', path = '/', needAuth = true) => {
 
     if(needAuth){
       const token = cookies.load('jwt_token');
-      if(path.includes('?')){
-        tail += `&jwt=${token}&bypass=true`;
-      }else{
-        tail += `?jwt=${token}&bypass=true`;
+      if(typeof token !== 'undefined'){
+        if(path.includes('?')){
+          tail += `&jwt=${token}&bypass=true`;
+        }else{
+          tail += `?jwt=${token}&bypass=true`;
+        }
       }
     }
 
