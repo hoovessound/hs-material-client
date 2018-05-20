@@ -37,7 +37,7 @@ export default class HomePage extends React.Component {
         if(this.props.match.params.offset){
             offset = parseInt(this.props.match.params.offset, 10);
         }
-        const url = getApiUrl('api', `/tracks?offset=${offset}`);
+        const url = getApiUrl('api', `/tracks?offset=${offset}&limit=20`);
         const response = await axios.get(url);
         if(!response.data.error){
             playerEmitter.emit('localplaylist.add', response.data);
