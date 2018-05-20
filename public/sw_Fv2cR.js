@@ -18,14 +18,6 @@ if (workbox) {
 
   // List of static files that we need them later on
   const preCacheList = [
-    '/',
-
-    // The "Apple Shell" lol
-    '/index.html',
-
-    // The main application logic
-    '/static/js/bundle.js',
-
     // The offline page
     '/offline.html',
 
