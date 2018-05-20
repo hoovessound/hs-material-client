@@ -25,6 +25,7 @@ import { notificationEmitter } from './Notification';
 import Chip from 'material-ui/Chip';
 import axios from 'axios';
 import isLogin from '../Utils/isLogin';
+import { get } from '../Utils/globalObject';
 
 import FavoriteIcon from 'material-ui-icons/Favorite';
 import PlayArrowIcon from 'material-ui-icons/PlayArrow';
@@ -32,6 +33,8 @@ import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import PageViewIcon from 'material-ui-icons/Pageview';
 
 import Slide from 'material-ui/transitions/Slide';
+
+let autoPlayLock = false;
 
 function Transition(props) {
     return <Slide direction="up" {...props} />;
@@ -129,6 +132,22 @@ class RecipeReviewCard extends React.Component {
     handleExpandClick = () => {
         this.setState({ expanded: !this.state.expanded });
     };
+
+    componentWillUpdate(){
+        const openTabs = get('openTabs');
+        if(!openTabs){
+            if(!autoPlayLock){
+                notificationEmitter.emit('push', {
+                    message: 'Autoplay this track is on :headphones:',
+                });
+                const { track } = this.props;
+                setTimeout(() => {
+                    playerEmitter.emit('play', track);
+                }, 2500);
+                autoPlayLock = true;
+            }
+        }
+    }
 
     async componentDidMount() {
         const { track } = this.props;
