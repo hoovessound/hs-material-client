@@ -5,6 +5,9 @@ import './Utils/socketIoAuth';
 import './SCSS/index.scss';
 import { set } from './Utils/globalObject';
 
+// Try to register a new service worker
+import './service_worker_registration';
+
 const disableAnimation = localStorage.getItem('hs_disable_animation') === 'true' ? true : false;
 const firstPaintElement = document.querySelector('#first_paint');
 const statusText = document.querySelector('#status-text');
