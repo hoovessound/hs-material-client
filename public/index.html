@@ -89,22 +89,22 @@
 </html>
 
 <script>
-  //This is the "Offline page" service worker
-
-  //Add this below content to your HTML page, or add the js file to your page at the very top to register sercie worker
-  if (navigator.serviceWorker.controller) {
-    console.log('[SW] active service worker found, no need to register')
-  } else {
-    //Register the ServiceWorker
-    navigator.serviceWorker.register('sw_Fv2cR.js', {
-      scope: '/'
-    })
-    .then(function(reg) {
-      console.log('[SW] Service worker has been registered for scope:'+ reg.scope);
-    })
-    .catch(error => {
-      console.error(error);
-    });
+  if('serviceWorker' in navigator) {
+    if (navigator.serviceWorker.controller) {
+      console.log('[SW] active service worker found, no need to register')
+    }else{
+      navigator.serviceWorker.register('sw_Fv2cR.js', {
+        scope: '/'
+      })
+      .then(function() {
+        console.log('[SW] Service worker has been registered');
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    }
+  }else{
+    console.log('Your current browser do not support service worker');
   }
 </script>
 
