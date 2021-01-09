@@ -51,7 +51,7 @@
     "react-router-ga": "^1.0.0",
     "react-simple-range": "^1.6.0",
     "sass-loader": "^6.0.7",
-    "socket.io-client": "^2.0.4",
+    "socket.io-client": "^3.0.0",
     "style-loader": "0.19.0",
     "sw-precache-webpack-plugin": "0.11.4",
     "url-loader": "0.6.2",
