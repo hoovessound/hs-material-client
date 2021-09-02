@@ -33,7 +33,7 @@
     "material-ui-icons": "^1.0.0-beta.36",
     "material-ui-image": "^3.0.0-pre.6",
     "moment": "^2.21.0",
-    "node-sass": "^4.7.2",
+    "node-sass": "^5.0.0",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-loader": "2.0.8",
