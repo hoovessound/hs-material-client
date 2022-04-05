@@ -32,7 +32,7 @@
     "material-ui": "^1.0.0-beta.42",
     "material-ui-icons": "^1.0.0-beta.36",
     "material-ui-image": "^3.0.0-pre.6",
-    "moment": "^2.21.0",
+    "moment": "^2.29.2",
     "node-sass": "^4.7.2",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
